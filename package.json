@@ -1,0 +1,9 @@
+{
+  "name": "electron-template",
+  "type": "module",
+  "version": "1.0.0",
+  "author": "lin-coln",
+  "engines": {
+    "node": ">=20.18.0"
+  }
+}
