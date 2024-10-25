@@ -1,2 +1,3 @@
 packages:
-  - 'client'
+  - client
+  - service-request
