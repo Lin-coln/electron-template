@@ -9,11 +9,14 @@ import commonjs from "@rollup/plugin-commonjs";
 // import { visualizer } from "rollup-plugin-visualizer";
 
 // utils
-import { getPackageJson, projectDirname } from "./utils";
+import { getPackageJson, projectDirname } from "@scripts/utils";
 
 export async function getBuildRollupOptions(): Promise<RollupOptions> {
   return {
-    input: path.resolve(projectDirname, "./src/main.ts"),
+    input: [
+      path.resolve(projectDirname, "./src/main.ts"),
+      path.resolve(projectDirname, "./src/preload.js"),
+    ],
     output: [
       {
         dir: path.resolve(projectDirname, "./dist"),

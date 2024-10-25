@@ -1,6 +1,6 @@
 import { watch, RollupBuild, RollupWatcher } from "rollup";
-import { getDevRollupOptions } from "./RollupUtils";
 import process from "node:process";
+import { getDevRollupOptions } from "@scripts/RollupUtils";
 
 void dev().then(
   () => {
@@ -13,6 +13,7 @@ void dev().then(
 );
 
 async function dev() {
+  await import("./clean");
   const options = await getDevRollupOptions();
   try {
     const watcher: RollupWatcher = watch(options);

@@ -2,6 +2,7 @@ import { app, BrowserWindow, screen } from "electron";
 import path from "node:path";
 import url from "node:url";
 import process from "node:process";
+import { INDEX_FILENAME, PRELOAD_FILENAME } from "./constant";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,16 +45,17 @@ async function startup() {
     show: false,
     webPreferences: {
       nodeIntegration: false,
-      preload: path.join(__dirname, "preload.js"),
+      preload: PRELOAD_FILENAME,
     },
   });
 
   // and load the index.html of the app.
-  const indexHtmlFilename = path.resolve(__dirname, "../views/index.html");
-  await mainWindow.loadFile(indexHtmlFilename);
+  await mainWindow.loadFile(INDEX_FILENAME);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
   mainWindow.show();
+
+  console.log(PRELOAD_FILENAME);
 }

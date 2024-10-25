@@ -6,9 +6,9 @@ import {
   RollupBuild,
 } from "rollup";
 import path from "node:path";
-import { getBuildRollupOptions } from "./RollupUtils";
 import process from "node:process";
-import { projectDirname } from "./utils";
+import { getBuildRollupOptions } from "@scripts/RollupUtils";
+import { projectDirname } from "@scripts/utils";
 
 void build().then(
   () => {
@@ -22,6 +22,7 @@ void build().then(
 );
 
 async function build() {
+  await import("./clean");
   const options = await getBuildRollupOptions();
   let rollupBuild: RollupBuild;
   try {
