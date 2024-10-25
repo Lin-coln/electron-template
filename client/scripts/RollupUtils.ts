@@ -79,7 +79,8 @@ async function getExternal(): Promise<string[]> {
 function manualChunks(id) {
   const key = "/node_modules/";
   const idx = id.lastIndexOf(key);
-  if (idx < 0) return;
-  const name = id.slice(idx + key.length).split("/")[0];
-  return `chunks/${name}`;
+  if (idx >= 0) {
+    const name = id.slice(idx + key.length).split("/")[0];
+    return `chunks/${name}`;
+  }
 }

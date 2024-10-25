@@ -28,6 +28,17 @@ app.whenReady().then(async () => {
   await startup();
 });
 
+/**
+ *
+ * - init electron app;
+ * - create init window;
+ *   - init system services;
+ *     - create windows
+ *     - ...
+ *   - init other services in child_process;
+ * - switch to main window;
+ *
+ */
 async function startup() {
   const displays = screen.getAllDisplays();
   const targetDisplay = displays[displays.length > 1 ? 1 : 0];

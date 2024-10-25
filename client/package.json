@@ -7,7 +7,8 @@
   "scripts": {
     "start": "pnpm run build && electron .",
     "dev": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/dev.ts",
-    "build": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/build.ts"
+    "build": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/build.ts",
+    "pack": ""
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.1",
