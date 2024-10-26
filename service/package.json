@@ -1,10 +1,11 @@
 {
-  "name": "service-request",
+  "name": "service",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "./dist/main.js",
   "scripts": {
+    "dev": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/dev.ts",
     "build": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/build.ts"
   },
   "devDependencies": {
