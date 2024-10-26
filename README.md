@@ -5,9 +5,15 @@
 
 ## Prerequisite
 
-- node v20.18.0
+- node
 - pnpm
 - nvm
+
+## Install
+
+- electron: 33.0.2
+  - chrome: 130
+  - node: 20.18.0
 
 ## Services
 
