@@ -1,7 +1,10 @@
-import { contextBridge } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("electron", {
-  node: () => process.versions.node,
+  service: {
+    invoke: (chain: string[], args: any[]) =>
+      ipcRenderer.invoke(`ServiceChannel#default`, "invoke", chain, args),
+  },
 });
 
 window.addEventListener("DOMContentLoaded", () => {

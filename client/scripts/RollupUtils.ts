@@ -23,7 +23,6 @@ export async function getBuildRollupOptions(): Promise<{
   main: RollupOptions;
 }> {
   const external = await getExternal();
-  const plugins = getPlugins();
   const main: RollupOptions = {
     input: path.resolve(projectDirname, "./src/main.ts"),
     output: [
@@ -35,7 +34,7 @@ export async function getBuildRollupOptions(): Promise<{
       },
     ],
     external,
-    plugins,
+    plugins: getPlugins(),
   };
   const preload: RollupOptions = {
     input: path.resolve(projectDirname, "./src/preload.ts"),
@@ -48,7 +47,7 @@ export async function getBuildRollupOptions(): Promise<{
       },
     ],
     external,
-    plugins,
+    plugins: getPlugins("preload"),
   };
   return { preload, main };
 }
@@ -58,7 +57,6 @@ export async function getDevRollupOptions(): Promise<{
   main: RollupOptions;
 }> {
   const external = await getExternal();
-  const plugins = getPlugins();
   const main: RollupOptions = {
     input: path.resolve(projectDirname, "./src/main.ts"),
     output: [
@@ -73,7 +71,7 @@ export async function getDevRollupOptions(): Promise<{
       clearScreen: true,
     },
     external,
-    plugins,
+    plugins: getPlugins(),
   };
   const preload: RollupOptions = {
     input: path.resolve(projectDirname, "./src/preload.ts"),
@@ -86,7 +84,7 @@ export async function getDevRollupOptions(): Promise<{
       },
     ],
     external,
-    plugins,
+    plugins: getPlugins("preload"),
   };
   return { preload, main };
 }
@@ -119,13 +117,20 @@ export async function build(options: RollupOptions) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getPlugins() {
+function getPlugins(type: "main" | "preload" = "main") {
   return [
     nodeResolve({
       extensions: [".js", ".ts"],
     }),
     commonjs(),
-    typescript({}),
+    typescript(
+      {
+        main: {},
+        preload: {
+          tsconfig: path.resolve(projectDirname, "./src/tsconfig.preload.json"),
+        },
+      }[type] ?? {},
+    ),
     // terser(),
     // visualizer({
     //   filename: "./dist/stats.html",
