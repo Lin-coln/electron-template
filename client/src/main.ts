@@ -40,6 +40,19 @@ app.whenReady().then(async () => {
  *
  */
 async function startup() {
+  await startupService();
+  console.log(`service started`);
+  await startupWindow();
+  console.log(`window started`);
+}
+
+async function startupService() {
+  //
+  const service = await import("./service").then((mod) => mod.default);
+  await service.initialize();
+}
+
+async function startupWindow() {
   const displays = screen.getAllDisplays();
   const targetDisplay = displays[displays.length > 1 ? 1 : 0];
 
@@ -56,17 +69,14 @@ async function startup() {
     show: false,
     webPreferences: {
       nodeIntegration: false,
+      contextIsolation: true,
       preload: PRELOAD_FILENAME,
     },
   });
 
   // and load the index.html of the app.
   await mainWindow.loadFile(INDEX_FILENAME);
-
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-
+  mainWindow.webContents.openDevTools();
   mainWindow.show();
-
-  console.log(PRELOAD_FILENAME);
 }
