@@ -1,6 +1,5 @@
-declare interface Window {
-  // todo: fix process type issue
-  process: any;
+declare global {
+  const process: any;
 }
 
 declare type ServiceSchema = service.schema.ServiceSchema;
