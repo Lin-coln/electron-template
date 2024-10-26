@@ -1,8 +1,4 @@
-// todo: fix process type issue
-declare const process: any;
-
-declare type ServiceSchema = service.schema.ServiceSchema;
-
-declare interface ElectronState {
-  services_schema: Record<string, ServiceSchema>;
-}
+/// <reference path="globals/index.d.ts" />
+/// <reference path="service/index.d.ts" />
+/// <reference path="services/index.d.ts" />
+/// <reference path="preload/index.d.ts" />

@@ -34,7 +34,7 @@ declare namespace service {
   }
 
   export namespace schema {
-    type ServiceSchema = Record<string, "endpoint" | ServiceSchema>;
+    export type ServiceSchema = Record<string, "endpoint" | ServiceSchema>;
   }
 
   export interface Service<Api extends ServiceApi> {
