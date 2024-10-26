@@ -1,8 +1,8 @@
-import { watch, RollupBuild, RollupWatcher } from "rollup";
+import { watch, RollupBuild, RollupWatcher, RollupOptions } from "rollup";
 import process from "node:process";
-import { getDevRollupOptions } from "@scripts/RollupUtils";
+import { build, getDevRollupOptions } from "@scripts/RollupUtils";
 
-void dev().then(
+void main().then(
   () => {
     console.log(`[dev] started up`);
   },
@@ -12,9 +12,17 @@ void dev().then(
   },
 );
 
-async function dev() {
+async function main() {
+  console.log(`[dev] loading...`);
   await import("./clean");
   const options = await getDevRollupOptions();
+  console.log(`[dev] compile preload`);
+  await build(options.preload);
+  console.log(`[dev] compile main`);
+  await dev(options.main);
+}
+
+async function dev(options: RollupOptions) {
   try {
     const watcher: RollupWatcher = watch(options);
     watcher.on("event", async (event) => {

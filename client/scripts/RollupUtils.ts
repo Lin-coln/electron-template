@@ -1,4 +1,11 @@
-import { RollupOptions } from "rollup";
+import {
+  OutputAsset,
+  OutputChunk,
+  OutputOptions,
+  rollup,
+  RollupBuild,
+  RollupOptions,
+} from "rollup";
 import path from "node:path";
 
 // plugins
@@ -11,7 +18,10 @@ import commonjs from "@rollup/plugin-commonjs";
 // utils
 import { getPackageJson, projectDirname } from "@scripts/utils";
 
-export async function getBuildRollupOptions(): Promise<RollupOptions[]> {
+export async function getBuildRollupOptions(): Promise<{
+  preload: RollupOptions;
+  main: RollupOptions;
+}> {
   const external = await getExternal();
   const plugins = getPlugins();
   const main: RollupOptions = {
@@ -40,22 +50,18 @@ export async function getBuildRollupOptions(): Promise<RollupOptions[]> {
     external,
     plugins,
   };
-  return [preload, main];
+  return { preload, main };
 }
 
-export async function getDevRollupOptions(): Promise<RollupOptions> {
-  return {
-    input: [
-      path.resolve(projectDirname, "./src/main.ts"),
-      path.resolve(projectDirname, "./src/preload.js"),
-    ],
+export async function getDevRollupOptions(): Promise<{
+  preload: RollupOptions;
+  main: RollupOptions;
+}> {
+  const external = await getExternal();
+  const plugins = getPlugins();
+  const main: RollupOptions = {
+    input: path.resolve(projectDirname, "./src/main.ts"),
     output: [
-      {
-        file: path.resolve(projectDirname, "./dist"),
-        format: "commonjs",
-        sourcemap: true,
-        manualChunks,
-      },
       {
         dir: path.resolve(projectDirname, "./dist"),
         format: "esm",
@@ -63,12 +69,52 @@ export async function getDevRollupOptions(): Promise<RollupOptions> {
         manualChunks,
       },
     ],
-    external: await getExternal(),
-    plugins: getPlugins(),
     watch: {
       clearScreen: true,
     },
+    external,
+    plugins,
   };
+  const preload: RollupOptions = {
+    input: path.resolve(projectDirname, "./src/preload.ts"),
+    output: [
+      {
+        file: path.resolve(projectDirname, "./dist/preload.js"),
+        format: "commonjs",
+        sourcemap: true,
+        manualChunks,
+      },
+    ],
+    external,
+    plugins,
+  };
+  return { preload, main };
+}
+
+export async function build(options: RollupOptions) {
+  let rollupBuild: RollupBuild;
+  try {
+    rollupBuild = await rollup(options);
+    const outputOptions: OutputOptions[] = Array.isArray(options.output)
+      ? options.output
+      : [options.output];
+    for (const options: OutputOptions of outputOptions) {
+      const { output } = await rollupBuild.write(options);
+      for (const chunkOrAsset: OutputChunk | OutputAsset of output) {
+        if (chunkOrAsset.type === "asset") {
+          console.log(`- asset: ${chunkOrAsset.fileName}`);
+        } else {
+          Object.keys(chunkOrAsset.modules).map((filename) => {
+            console.log(`- chunk:`, path.relative(projectDirname, filename));
+          });
+        }
+      }
+    }
+  } finally {
+    if (rollupBuild) {
+      await rollupBuild.close();
+    }
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
