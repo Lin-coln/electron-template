@@ -48,8 +48,8 @@ async function startup() {
 
 async function startupService() {
   //
-  const service = await import("./service").then((mod) => mod.default);
-  await service.initialize();
+  const services = await import("./services").then((mod) => mod.default);
+  await services.initialize();
 }
 
 async function startupWindow() {

@@ -1,9 +1,8 @@
-import foobarService from "@src/service/foobar.service";
+import foobarService from "@src/services/foobar.service";
 import { ipcMain } from "electron";
-import Service from "@src/service/Service";
+import Service from "@src/services/Service";
 export default {
   async initialize() {
-    //
     ipcMain.on(`Service#getInitialState`, async (event) => {
       event.returnValue = await collectElectronState();
     });

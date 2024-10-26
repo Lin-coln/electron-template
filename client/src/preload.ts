@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import ClientFactory from "@src/service/ClientFactory";
+import ClientFactory from "@src/services/ClientFactory";
 
 console.log(`[preload] Service#getInitialState...`);
 const timestamp = Date.now();
@@ -47,6 +47,4 @@ window.addEventListener("DOMContentLoaded", async () => {
   await factory.fetchSchemas();
 
   const client = factory.get<FoobarService>("foobar");
-  console.log(client.foo);
-  console.log(`client test`, await client.foo(89));
 });
