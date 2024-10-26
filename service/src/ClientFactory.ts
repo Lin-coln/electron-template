@@ -1,8 +1,10 @@
 class ClientFactory {
   clients: Map<string, any> = new Map();
-  schemas: Record<string, ServiceSchema> | null;
+  schemas: Record<string, service.schema.ServiceSchema> | null;
 
-  private onFetchSchemas: () => Promise<Record<string, ServiceSchema>>;
+  private onFetchSchemas: () => Promise<
+    Record<string, service.schema.ServiceSchema>
+  >;
   private onInvoke: (
     name: string,
     chain: string[],
@@ -10,7 +12,7 @@ class ClientFactory {
   ) => Promise<any>;
 
   constructor(options: {
-    onFetchSchemas(): Promise<Record<string, ServiceSchema>>;
+    onFetchSchemas(): Promise<Record<string, service.schema.ServiceSchema>>;
     onInvoke(name: string, chain: string[], args: any[]): Promise<any>;
   }) {
     this.onFetchSchemas = options.onFetchSchemas;
@@ -36,14 +38,20 @@ class ClientFactory {
     throw new Error(`service schema not found: ${name}`);
   }
 
-  private getClient(uuid: string, target: ServiceSchema | "endpoint") {
+  private getClient(
+    uuid: string,
+    target: service.schema.ServiceSchema | "endpoint",
+  ) {
     if (!this.clients.has(uuid)) {
       this.clients.set(uuid, this.createProxy(uuid, target));
     }
     return this.clients.get(uuid)!;
   }
 
-  private createProxy(uuid: string, source: ServiceSchema | "endpoint") {
+  private createProxy(
+    uuid: string,
+    source: service.schema.ServiceSchema | "endpoint",
+  ) {
     let target = {};
     if (source === "endpoint") {
       target = Object.defineProperties(() => `remote method`, {

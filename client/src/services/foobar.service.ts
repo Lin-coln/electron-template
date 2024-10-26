@@ -1,4 +1,5 @@
-import Service from "./Service";
+import { Service } from "service";
+import { setupIpcHandler } from "@src/services/utils";
 
 const foobarHandler: service.ServiceHandlers<any> = {
   foo(foo) {
@@ -17,9 +18,10 @@ const foobarHandler: service.ServiceHandlers<any> = {
   },
 };
 
-const foobarService = new Service<any>({
+const foobarService = new Service<FoobarService>({
   name: "foobar",
   handlers: foobarHandler,
+  onSetupInvokeHandler: setupIpcHandler,
 });
 
 export default foobarService;

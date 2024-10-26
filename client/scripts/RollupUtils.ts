@@ -23,6 +23,7 @@ export async function getBuildRollupOptions(): Promise<{
   main: RollupOptions;
 }> {
   const external = await getExternal();
+  const manualChunks = await createManualChunks();
   const main: RollupOptions = {
     input: path.resolve(projectDirname, "./src/main.ts"),
     output: [
@@ -57,6 +58,7 @@ export async function getDevRollupOptions(): Promise<{
   main: RollupOptions;
 }> {
   const external = await getExternal();
+  const manualChunks = await createManualChunks();
   const main: RollupOptions = {
     input: path.resolve(projectDirname, "./src/main.ts"),
     output: [
@@ -149,11 +151,15 @@ async function getExternal(): Promise<string[]> {
   );
 }
 
-function manualChunks(id) {
-  const key = "/node_modules/";
-  const idx = id.lastIndexOf(key);
-  if (idx >= 0) {
-    const name = id.slice(idx + key.length).split("/")[0];
-    return `chunks/${name}`;
-  }
+async function createManualChunks() {
+  const pkg = await getPackageJson();
+
+  return (id) => {
+    const key = "/node_modules/";
+    const idx = id.lastIndexOf(key);
+    if (idx >= 0) {
+      const name = id.slice(idx + key.length).split("/")[0];
+      return `chunks/${name}`;
+    }
+  };
 }

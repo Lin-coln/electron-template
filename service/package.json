@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "main": "./dist/main.js",
+  "main": "./dist/main.cjs",
+  "module": "./dist/main.js",
+  "types": "./src/main.ts",
   "scripts": {
     "dev": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/dev.ts",
     "build": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/build.ts"

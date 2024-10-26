@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import ClientFactory from "@src/services/ClientFactory";
+import { ClientFactory } from "service";
 
 console.log(`[preload] Service#getInitialState...`);
 const timestamp = Date.now();

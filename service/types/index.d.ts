@@ -1,1 +1,1 @@
-declare global {}
+/// <reference path="service/index.d.ts" />

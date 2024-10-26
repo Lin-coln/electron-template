@@ -24,7 +24,15 @@ export async function getBuildRollupOptions(): Promise<RollupOptions> {
     output: [
       {
         dir: path.resolve(projectDirname, "./dist"),
+        entryFileNames: "[name].js",
         format: "esm",
+        sourcemap: true,
+        manualChunks,
+      },
+      {
+        dir: path.resolve(projectDirname, "./dist"),
+        entryFileNames: "[name].cjs",
+        format: "cjs",
         sourcemap: true,
         manualChunks,
       },
@@ -41,7 +49,15 @@ export async function getDevRollupOptions(): Promise<RollupOptions> {
     output: [
       {
         dir: path.resolve(projectDirname, "./dist"),
+        entryFileNames: "[name].js",
         format: "esm",
+        sourcemap: true,
+        manualChunks,
+      },
+      {
+        dir: path.resolve(projectDirname, "./dist"),
+        entryFileNames: "[name].cjs",
+        format: "cjs",
         sourcemap: true,
         manualChunks,
       },
