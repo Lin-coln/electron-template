@@ -11,12 +11,11 @@ import commonjs from "@rollup/plugin-commonjs";
 // utils
 import { getPackageJson, projectDirname } from "@scripts/utils";
 
-export async function getBuildRollupOptions(): Promise<RollupOptions> {
-  return {
-    input: [
-      path.resolve(projectDirname, "./src/main.ts"),
-      path.resolve(projectDirname, "./src/preload.js"),
-    ],
+export async function getBuildRollupOptions(): Promise<RollupOptions[]> {
+  const external = await getExternal();
+  const plugins = getPlugins();
+  const main: RollupOptions = {
+    input: path.resolve(projectDirname, "./src/main.ts"),
     output: [
       {
         dir: path.resolve(projectDirname, "./dist"),
@@ -25,15 +24,38 @@ export async function getBuildRollupOptions(): Promise<RollupOptions> {
         manualChunks,
       },
     ],
-    external: await getExternal(),
-    plugins: getPlugins(),
+    external,
+    plugins,
   };
+  const preload: RollupOptions = {
+    input: path.resolve(projectDirname, "./src/preload.ts"),
+    output: [
+      {
+        file: path.resolve(projectDirname, "./dist/preload.js"),
+        format: "commonjs",
+        sourcemap: true,
+        manualChunks,
+      },
+    ],
+    external,
+    plugins,
+  };
+  return [preload, main];
 }
 
 export async function getDevRollupOptions(): Promise<RollupOptions> {
   return {
-    input: path.resolve(projectDirname, "./src/main.ts"),
+    input: [
+      path.resolve(projectDirname, "./src/main.ts"),
+      path.resolve(projectDirname, "./src/preload.js"),
+    ],
     output: [
+      {
+        file: path.resolve(projectDirname, "./dist"),
+        format: "commonjs",
+        sourcemap: true,
+        manualChunks,
+      },
       {
         dir: path.resolve(projectDirname, "./dist"),
         format: "esm",

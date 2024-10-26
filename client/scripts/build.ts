@@ -4,15 +4,15 @@ import {
   OutputOptions,
   rollup,
   RollupBuild,
+  RollupOptions,
 } from "rollup";
 import path from "node:path";
 import process from "node:process";
 import { getBuildRollupOptions } from "@scripts/RollupUtils";
 import { projectDirname } from "@scripts/utils";
 
-void build().then(
+void main().then(
   () => {
-    console.log(`[build] build success`);
     process.exit(0);
   },
   (reason) => {
@@ -21,9 +21,18 @@ void build().then(
   },
 );
 
-async function build() {
+async function main() {
   await import("./clean");
-  const options = await getBuildRollupOptions();
+  const optionsList = await getBuildRollupOptions();
+
+  for (const options of optionsList) {
+    await build(options);
+  }
+
+  console.log(`[build] build success`);
+}
+
+async function build(options: RollupOptions) {
   let rollupBuild: RollupBuild;
   try {
     rollupBuild = await rollup(options);
