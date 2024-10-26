@@ -40,7 +40,7 @@ class Service<Api extends service.ServiceApi> implements service.Service<Api> {
       next: () => {
         throw new Error(`failed to collectMetadata`);
       },
-    });
+    }) as any;
   }
 
   invoke<Args extends any[] = any[], R extends service.Serializable = unknown>(

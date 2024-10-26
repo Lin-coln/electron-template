@@ -15,7 +15,8 @@ app.whenReady().then(async () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length !== 0) return;
-    startup();
+
+    startupWindow();
   });
 
   // Quit when all windows are closed, except on macOS. There, it's common
@@ -41,15 +42,14 @@ app.whenReady().then(async () => {
  */
 async function startup() {
   await startupService();
-  console.log(`service started`);
   await startupWindow();
-  console.log(`window started`);
 }
 
 async function startupService() {
   //
   const services = await import("./services").then((mod) => mod.default);
   await services.initialize();
+  console.log(`service started`);
 }
 
 async function startupWindow() {
@@ -79,4 +79,6 @@ async function startupWindow() {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
   mainWindow.show();
+
+  console.log(`window started`);
 }

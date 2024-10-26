@@ -44,6 +44,7 @@ declare namespace service {
     export type ServiceSchema = Record<string, "endpoint" | ServiceSchema>;
     export type ServiceMetadata = {
       name: string;
+      type?: string;
       schema: ServiceSchema;
     };
   }
@@ -52,8 +53,8 @@ declare namespace service {
     service: Service<Api>;
     load?(next: () => Promise<void>): Promise<void>;
     collectMetadata?(
-      next: () => Promise<metadata.ServiceMetadata>,
-    ): Promise<metadata.ServiceMetadata>;
+      next: () => Promise<Partial<metadata.ServiceMetadata>>,
+    ): Promise<Partial<metadata.ServiceMetadata>>;
     invoke?<Args extends any[] = any[], R extends Serializable = unknown>(
       chain: string[],
       args: Args,

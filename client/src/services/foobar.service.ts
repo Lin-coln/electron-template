@@ -1,4 +1,4 @@
-import { LocalServiceMw, Service } from "service";
+import { LocalService } from "service";
 import { ipcMain } from "electron";
 
 const foobarHandler: service.ServiceApiHandlers<FoobarService> = {
@@ -18,11 +18,10 @@ const foobarHandler: service.ServiceApiHandlers<FoobarService> = {
   },
 };
 
-const foobarService = new Service<FoobarService>("foobar");
-foobarService.use(
-  new LocalServiceMw(foobarService, {
-    handlers: foobarHandler,
-  }),
+const foobarService = new LocalService<FoobarService>(
+  "foobar",
+  "electron_main",
+  foobarHandler,
 );
 const channel = `ServiceChannel#${foobarService.name}`;
 ipcMain.handle(

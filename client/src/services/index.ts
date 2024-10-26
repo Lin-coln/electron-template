@@ -3,17 +3,11 @@ import { ipcMain } from "electron";
 import { Service } from "service";
 export default {
   async initialize() {
-    ipcMain.on(`Service#getInitialState`, async (event) => {
-      event.returnValue = await collectElectronState();
+    ipcMain.on(`ServiceManager#services`, async (event) => {
+      event.returnValue = Array.from(Service.Manager.services.keys());
     });
 
     await foobarService.load();
     console.log("services initialized");
   },
 };
-
-async function collectElectronState(): Promise<ElectronState> {
-  return {
-    services: Array.from(Service.Manager.services.keys()),
-  };
-}

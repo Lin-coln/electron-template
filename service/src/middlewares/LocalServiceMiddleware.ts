@@ -1,13 +1,18 @@
-class LocalServiceMw<Api extends service.ServiceApi>
+class LocalServiceMiddleware<Api extends service.ServiceApi>
   implements service.ServiceMiddleware<Api>
 {
+  type: string;
   service: service.Service<Api>;
   handlers: service.ServiceApiHandlers<Api>;
   schema: service.metadata.ServiceSchema;
   constructor(
     service: service.Service<Api>,
-    options: { handlers: service.ServiceApiHandlers<Api> },
+    options: {
+      type: string;
+      handlers: service.ServiceApiHandlers<Api>;
+    },
   ) {
+    this.type = options.type;
     this.service = service;
     this.handlers = options.handlers;
     this.schema = parseSchema(this.handlers);
@@ -18,11 +23,10 @@ class LocalServiceMw<Api extends service.ServiceApi>
     return next();
   }
 
-  async collectMetadata(
-    next: () => Promise<service.metadata.ServiceMetadata>,
-  ): Promise<service.metadata.ServiceMetadata> {
+  async collectMetadata(next) {
     return {
       name: this.service.name,
+      type: this.type,
       schema: this.schema,
     };
   }
@@ -39,7 +43,7 @@ class LocalServiceMw<Api extends service.ServiceApi>
     return next();
   }
 }
-export default LocalServiceMw;
+export default LocalServiceMiddleware;
 
 function parseSchema(
   handlers: service.ServiceApiHandlers<unknown>,

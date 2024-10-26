@@ -1,5 +1,7 @@
 /// <reference path="../types/index.d.ts" />
 
-export { default as LocalServiceMw } from "./LocalService.mw";
-export { default as Service } from "./Service";
-export { default as ServiceInvoker } from "./ServiceInvoker";
+export { default as Service } from "./core/Service";
+export { default as ServiceInvoker } from "./core/ServiceInvoker";
+
+export { default as LocalServiceMiddleware } from "./middlewares/LocalServiceMiddleware";
+export { default as LocalService } from "./services/LocalService";

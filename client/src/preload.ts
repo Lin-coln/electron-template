@@ -1,13 +1,14 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { Service, ServiceInvoker } from "service";
 
-console.log(`[preload] Service#getInitialState...`);
+console.log(`[preload] ServiceManager#services...`);
 const timestamp = Date.now();
-const state: ElectronState = ipcRenderer.sendSync(`Service#getInitialState`);
-console.log(`[preload] InitialState:`, state);
+const services: string[] = ipcRenderer.sendSync(`ServiceManager#services`);
+console.log(`[preload] services:`, services);
 
 window.electron = {
   service: {
+    services,
     invoke: async (name: string, chain: string[], args: any[]) => {
       return ipcRenderer.invoke(
         `ServiceChannel#${name}`,
@@ -27,30 +28,22 @@ console.log(
   `[preload] done. cost: ${Math.round((Date.now() - timestamp) * 1000) / 1000} ms`,
 );
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-window.addEventListener("DOMContentLoaded", () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector);
-    if (element) element.innerText = text;
-  };
-
-  for (const type of ["chrome", "node", "electron"]) {
-    replaceText(`${type}-version`, process.versions[type]);
-  }
-});
-
 /////////////////////////////////////////////////////////////////
 
-class RemoteServiceMw<Api extends service.ServiceApi>
+class RemoteServiceMiddleware<Api extends service.ServiceApi>
   implements service.ServiceMiddleware<Api>
 {
   service: service.Service<Api>;
-  constructor(service) {
+  type: string;
+  constructor(service, type) {
     this.service = service;
+    this.type = type;
   }
 
   collectMetadata() {
+    if (this.type !== "electron_main") {
+      throw new Error(`cannot resolve type`);
+    }
     return window.electron.service.collectMetadata(this.service.name);
   }
 
@@ -59,18 +52,25 @@ class RemoteServiceMw<Api extends service.ServiceApi>
     args: Args,
     next: () => Promise<R>,
   ): Promise<R> {
+    if (this.type !== "electron_main") {
+      throw new Error(`cannot resolve type`);
+    }
     return window.electron.service.invoke(this.service.name, chain, args);
   }
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
-  const service = new Service("foobar");
-  service.use(new RemoteServiceMw(service));
-  await service.load();
+  await Promise.all(
+    window.electron.service.services.map(async (name) => {
+      const metadata = await window.electron.service.collectMetadata(name);
+      const service = new Service(name);
+      service.use(new RemoteServiceMiddleware(service, metadata.type));
+      await service.load();
+    }),
+  );
 
   const invoker = new ServiceInvoker();
   const client = await invoker.get<FoobarService>("foobar");
-
   console.log(client.foobar);
   console.log(`client`, await client.foobar());
 });
