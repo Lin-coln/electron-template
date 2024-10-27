@@ -18,79 +18,6 @@ import commonjs from "@rollup/plugin-commonjs";
 // utils
 import { getPackageJson, projectDirname } from "@scripts/utils";
 
-export async function getBuildRollupOptions(): Promise<{
-  preload: RollupOptions;
-  main: RollupOptions;
-}> {
-  const external = await getExternal();
-  const manualChunks = await createManualChunks();
-  const main: RollupOptions = {
-    input: path.resolve(projectDirname, "./src/main.ts"),
-    output: [
-      {
-        dir: path.resolve(projectDirname, "./dist"),
-        format: "esm",
-        sourcemap: true,
-        manualChunks,
-      },
-    ],
-    external,
-    plugins: getPlugins(),
-  };
-  const preload: RollupOptions = {
-    input: path.resolve(projectDirname, "./src/preload.ts"),
-    output: [
-      {
-        file: path.resolve(projectDirname, "./dist/preload.js"),
-        format: "commonjs",
-        sourcemap: true,
-        manualChunks,
-      },
-    ],
-    external,
-    plugins: getPlugins("preload"),
-  };
-  return { preload, main };
-}
-
-export async function getDevRollupOptions(): Promise<{
-  preload: RollupOptions;
-  main: RollupOptions;
-}> {
-  const external = await getExternal();
-  const manualChunks = await createManualChunks();
-  const main: RollupOptions = {
-    input: path.resolve(projectDirname, "./src/main.ts"),
-    output: [
-      {
-        dir: path.resolve(projectDirname, "./dist"),
-        format: "esm",
-        sourcemap: true,
-        manualChunks,
-      },
-    ],
-    watch: {
-      clearScreen: true,
-    },
-    external,
-    plugins: getPlugins(),
-  };
-  const preload: RollupOptions = {
-    input: path.resolve(projectDirname, "./src/preload.ts"),
-    output: [
-      {
-        file: path.resolve(projectDirname, "./dist/preload.js"),
-        format: "commonjs",
-        sourcemap: true,
-        manualChunks,
-      },
-    ],
-    external,
-    plugins: getPlugins("preload"),
-  };
-  return { preload, main };
-}
-
 export async function build(options: RollupOptions) {
   let rollupBuild: RollupBuild;
   try {
@@ -119,7 +46,7 @@ export async function build(options: RollupOptions) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getPlugins(type: "main" | "preload" = "main") {
+export function getPlugins(type: "main" | "preload" = "main") {
   return [
     nodeResolve({
       extensions: [".js", ".ts"],
@@ -129,7 +56,7 @@ function getPlugins(type: "main" | "preload" = "main") {
       {
         main: {},
         preload: {
-          tsconfig: path.resolve(projectDirname, "./src/tsconfig.preload.json"),
+          tsconfig: path.resolve(projectDirname, "./tsconfig.preload.json"),
         },
       }[type] ?? {},
     ),
@@ -140,7 +67,7 @@ function getPlugins(type: "main" | "preload" = "main") {
   ];
 }
 
-async function getExternal(): Promise<string[]> {
+export async function getExternal(): Promise<string[]> {
   const pkg = await getPackageJson();
   return Array.from<string>(
     new Set([
@@ -151,7 +78,7 @@ async function getExternal(): Promise<string[]> {
   );
 }
 
-async function createManualChunks() {
+export async function createManualChunks() {
   const pkg = await getPackageJson();
 
   return (id) => {

@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "..",
     "module": "esnext",
     "target": "esnext",
     "strict": true,
@@ -13,10 +12,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types", "./src/types"],
+    "baseUrl": ".",
     "paths": {
-      "@scripts/*": ["./scripts/*"]
+      "@scripts/*": ["scripts/*"],
+      "@tools/api": ["./node_modules/@tools/api"]
     }
   },
-  "include": ["./scripts"],
-  "exclude": ["./node_modules"]
+  "include": ["./scripts/**/*"],
+  "exclude": ["node_modules"]
 }

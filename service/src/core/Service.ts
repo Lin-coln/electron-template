@@ -1,9 +1,16 @@
 import resolveWithMiddlewares from "./resolveWithMiddlewares";
 import ServiceManager from "./ServiceManager";
+import {
+  ServiceApi,
+  ServiceMiddleware,
+  Service as IService,
+  ServiceMetadata,
+  Serializable,
+} from "@src/types";
 
-class Service<Api extends service.ServiceApi> implements service.Service<Api> {
+class Service<Api extends ServiceApi> implements IService<Api> {
   static _manager: ServiceManager;
-  static get Manager() {
+  static get Manager(): ServiceManager {
     if (!this._manager) {
       this._manager = new ServiceManager();
     }
@@ -11,20 +18,20 @@ class Service<Api extends service.ServiceApi> implements service.Service<Api> {
   }
 
   readonly name: string;
-  middlewares: service.ServiceMiddleware<Api>[];
+  middlewares: ServiceMiddleware<Api>[];
   constructor(name: string) {
     this.name = name;
     this.middlewares = [];
     Service.Manager.appendService(this);
   }
 
-  use(middleware: service.ServiceMiddleware<Api>): this {
+  use(middleware: ServiceMiddleware<Api>): this {
     this.middlewares.push(middleware);
     return this;
   }
 
   load(): Promise<void> {
-    return resolveWithMiddlewares<service.ServiceMiddleware<Api>>({
+    return resolveWithMiddlewares<ServiceMiddleware<Api>>({
       middlewares: [...this.middlewares],
       resolve: (middleware, _, next) =>
         middleware.load ? middleware.load(next) : next(),
@@ -32,8 +39,8 @@ class Service<Api extends service.ServiceApi> implements service.Service<Api> {
     });
   }
 
-  collectMetadata(): Promise<service.metadata.ServiceMetadata> {
-    return resolveWithMiddlewares<service.ServiceMiddleware<Api>>({
+  collectMetadata(): Promise<ServiceMetadata> {
+    return resolveWithMiddlewares<ServiceMiddleware<Api>>({
       middlewares: [...this.middlewares],
       resolve: (middleware, _, next) =>
         middleware.collectMetadata ? middleware.collectMetadata(next) : next(),
@@ -43,11 +50,11 @@ class Service<Api extends service.ServiceApi> implements service.Service<Api> {
     }) as any;
   }
 
-  invoke<Args extends any[] = any[], R extends service.Serializable = unknown>(
+  invoke<Args extends any[] = any[], R extends Serializable = unknown>(
     chain: string[],
     args: Args,
   ): Promise<R> {
-    return resolveWithMiddlewares<service.ServiceMiddleware<Api>>({
+    return resolveWithMiddlewares<ServiceMiddleware<Api>>({
       middlewares: [...this.middlewares],
       context: { chain, args },
       resolve: (middleware, context, next) =>

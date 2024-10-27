@@ -17,59 +17,6 @@ import commonjs from "@rollup/plugin-commonjs";
 // utils
 import { getPackageJson, projectDirname } from "@scripts/utils";
 
-export async function getBuildRollupOptions(): Promise<RollupOptions> {
-  const external = await getExternal();
-  return {
-    input: path.resolve(projectDirname, "./src/main.ts"),
-    output: [
-      {
-        dir: path.resolve(projectDirname, "./dist"),
-        entryFileNames: "[name].js",
-        format: "esm",
-        sourcemap: true,
-        manualChunks,
-      },
-      {
-        dir: path.resolve(projectDirname, "./dist"),
-        entryFileNames: "[name].cjs",
-        format: "cjs",
-        sourcemap: true,
-        manualChunks,
-      },
-    ],
-    external,
-    plugins: getPlugins(),
-  };
-}
-
-export async function getDevRollupOptions(): Promise<RollupOptions> {
-  const external = await getExternal();
-  return {
-    input: path.resolve(projectDirname, "./src/main.ts"),
-    output: [
-      {
-        dir: path.resolve(projectDirname, "./dist"),
-        entryFileNames: "[name].js",
-        format: "esm",
-        sourcemap: true,
-        manualChunks,
-      },
-      {
-        dir: path.resolve(projectDirname, "./dist"),
-        entryFileNames: "[name].cjs",
-        format: "cjs",
-        sourcemap: true,
-        manualChunks,
-      },
-    ],
-    watch: {
-      clearScreen: true,
-    },
-    external,
-    plugins: getPlugins(),
-  };
-}
-
 export async function build(options: RollupOptions) {
   let rollupBuild: RollupBuild;
   try {
@@ -98,13 +45,15 @@ export async function build(options: RollupOptions) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getPlugins() {
+export function getPlugins({ tsconfig }: any = {}) {
   return [
     nodeResolve({
       extensions: [".js", ".ts"],
     }),
     commonjs(),
-    typescript({}),
+    typescript({
+      tsconfig,
+    }),
     // terser(),
     // visualizer({
     //   filename: "./dist/stats.html",
@@ -112,18 +61,19 @@ function getPlugins() {
   ];
 }
 
-async function getExternal(): Promise<string[]> {
+export async function getExternal(externals: string[] = []): Promise<string[]> {
   const pkg = await getPackageJson();
   return Array.from<string>(
     new Set([
       "electron",
+      ...externals,
       ...Object.keys(pkg.devDependencies ?? []),
       ...Object.keys(pkg.peerDependencies ?? []),
     ]),
   );
 }
 
-function manualChunks(id) {
+export function manualChunks(id) {
   const key = "/node_modules/";
   const idx = id.lastIndexOf(key);
   if (idx >= 0) {

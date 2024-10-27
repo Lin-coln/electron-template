@@ -1,7 +1,7 @@
-import { LocalService } from "service";
-import { ipcMain } from "electron";
+import { ElectronMainService } from "service/electron";
+import { ServiceApiHandlers } from "service";
 
-const foobarHandler: service.ServiceApiHandlers<FoobarService> = {
+const foobarHandler: ServiceApiHandlers<FoobarService> = {
   foo(foo) {
     return foo * 2;
   },
@@ -18,21 +18,9 @@ const foobarHandler: service.ServiceApiHandlers<FoobarService> = {
   },
 };
 
-const foobarService = new LocalService<FoobarService>(
+const foobarService = new ElectronMainService<FoobarService>(
   "foobar",
-  "electron_main",
   foobarHandler,
-);
-const channel = `ServiceChannel#${foobarService.name}`;
-ipcMain.handle(
-  channel,
-  async (event, type: string, chain: string[], args: any[]) => {
-    if (type === "invoke") {
-      return await foobarService.invoke(chain, args);
-    } else if (type === "collectMetadata") {
-      return await foobarService.collectMetadata();
-    }
-  },
 );
 
 export default foobarService;

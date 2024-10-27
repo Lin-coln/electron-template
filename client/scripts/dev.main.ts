@@ -1,48 +1,23 @@
 import { watch, RollupBuild, RollupWatcher, RollupOptions } from "rollup";
 import process from "node:process";
-import {
-  build,
-  getExternal,
-  getPlugins,
-  manualChunks,
-} from "@scripts/RollupUtils";
+import { build, getDevRollupOptions } from "@scripts/RollupUtils";
+import { ts } from "@tools/api";
 import path from "node:path";
+import { createManualChunks, getExternal, getPlugins } from "./RollupUtils";
 import { projectDirname } from "./utils";
 
-void main().then(
-  () => {
-    console.log(`[dev] started up`);
-  },
-  (reason) => {
-    console.error(reason);
-    process.exit(1);
-  },
-);
+void main();
 
 async function main() {
-  console.log(`[dev] loading...`);
-  await import("./clean");
-  const options = await getDevRollupOptions();
-  console.log(`[dev] compiling...`);
-  await dev(options);
-}
-
-async function getDevRollupOptions(): Promise<RollupOptions> {
+  console.log(`[dev:main] loading...`);
   const external = await getExternal();
-  return {
+  const manualChunks = await createManualChunks();
+  const options: RollupOptions = {
     input: path.resolve(projectDirname, "./src/main.ts"),
     output: [
       {
         dir: path.resolve(projectDirname, "./dist"),
-        entryFileNames: "[name].js",
         format: "esm",
-        sourcemap: true,
-        manualChunks,
-      },
-      {
-        dir: path.resolve(projectDirname, "./dist"),
-        entryFileNames: "[name].cjs",
-        format: "cjs",
         sourcemap: true,
         manualChunks,
       },
@@ -53,6 +28,10 @@ async function getDevRollupOptions(): Promise<RollupOptions> {
     external,
     plugins: getPlugins(),
   };
+
+  await dev(options);
+
+  console.log(`[dev:main] started up`);
 }
 
 async function dev(options: RollupOptions) {

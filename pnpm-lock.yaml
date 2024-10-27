@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@tools/commands':
+        specifier: workspace:*
+        version: link:tools/commands
       prettier:
         specifier: ^3.3.3
         version: registry.npmmirror.com/prettier@3.3.3
@@ -39,6 +42,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.1
         version: registry.npmmirror.com/@rollup/plugin-typescript@12.1.1(rollup@4.24.0)(tslib@2.8.0)(typescript@5.6.3)
+      '@tools/api':
+        specifier: workspace:*
+        version: link:../tools/api
       '@types/node':
         specifier: ^22.7.9
         version: registry.npmmirror.com/@types/node@22.8.0
@@ -79,6 +85,20 @@ importers:
       rollup-plugin-node-externals:
         specifier: ^7.1.3
         version: registry.npmmirror.com/rollup-plugin-node-externals@7.1.3(rollup@4.24.0)
+
+  tools/api: {}
+
+  tools/commands:
+    devDependencies:
+      '@tools/api':
+        specifier: workspace:*
+        version: link:../api
+      chalk:
+        specifier: ^5.3.0
+        version: registry.npmmirror.com/chalk@5.3.0
+      commander:
+        specifier: ^12.1.0
+        version: registry.npmmirror.com/commander@12.1.0
 
 packages:
 
@@ -747,12 +767,26 @@ packages:
       responselike: registry.npmmirror.com/responselike@2.0.1
     dev: true
 
+  registry.npmmirror.com/chalk@5.3.0:
+    resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/chalk/-/chalk-5.3.0.tgz}
+    name: chalk
+    version: 5.3.0
+    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
+    dev: true
+
   registry.npmmirror.com/clone-response@1.0.3:
     resolution: {integrity: sha512-ROoL94jJH2dUVML2Y/5PEDNaSHgeOdSDicUyS7izcF63G6sTc/FTjLub4b8Il9S8S0beOfYt0TaA5qvFK+w0wA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/clone-response/-/clone-response-1.0.3.tgz}
     name: clone-response
     version: 1.0.3
     dependencies:
       mimic-response: registry.npmmirror.com/mimic-response@1.0.1
+    dev: true
+
+  registry.npmmirror.com/commander@12.1.0:
+    resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/commander/-/commander-12.1.0.tgz}
+    name: commander
+    version: 12.1.0
+    engines: {node: '>=18'}
     dev: true
 
   registry.npmmirror.com/commondir@1.0.1:

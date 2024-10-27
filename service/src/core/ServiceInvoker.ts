@@ -1,4 +1,5 @@
 import Service from "./Service";
+import { ServiceSchema } from "@src/types";
 
 class ServiceInvoker {
   // uuid = `${name}.${chain.join('.')}
@@ -13,10 +14,7 @@ class ServiceInvoker {
     return this.getInvokeNode(metadata.name, metadata.schema);
   }
 
-  getInvokeNode(
-    uuid: string,
-    target: service.metadata.ServiceSchema | "endpoint",
-  ) {
+  getInvokeNode(uuid: string, target: ServiceSchema | "endpoint") {
     if (!this.invokeNodes.has(uuid)) {
       this.invokeNodes.set(uuid, createProxy(this, uuid, target));
     }
@@ -29,7 +27,7 @@ export default ServiceInvoker;
 function createProxy(
   invoker: ServiceInvoker,
   uuid: string,
-  source: service.metadata.ServiceSchema | "endpoint",
+  source: ServiceSchema | "endpoint",
 ) {
   let target = {};
   if (source === "endpoint") {

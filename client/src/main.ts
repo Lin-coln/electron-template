@@ -1,7 +1,6 @@
 import { app, BrowserWindow, screen } from "electron";
 import path from "node:path";
 import url from "node:url";
-import process from "node:process";
 import { INDEX_FILENAME, PRELOAD_FILENAME } from "./constant";
 
 const __filename = url.fileURLToPath(import.meta.url);

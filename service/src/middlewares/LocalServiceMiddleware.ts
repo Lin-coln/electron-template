@@ -1,15 +1,25 @@
-class LocalServiceMiddleware<Api extends service.ServiceApi>
-  implements service.ServiceMiddleware<Api>
+import {
+  Serializable,
+  Service,
+  ServiceApi,
+  ServiceApiHandlers,
+  ServiceEndpoint,
+  ServiceMiddleware,
+  ServiceSchema,
+} from "@src/types";
+
+class LocalServiceMiddleware<Api extends ServiceApi>
+  implements ServiceMiddleware<Api>
 {
   type: string;
-  service: service.Service<Api>;
-  handlers: service.ServiceApiHandlers<Api>;
-  schema: service.metadata.ServiceSchema;
+  service: Service<Api>;
+  handlers: ServiceApiHandlers<Api>;
+  schema: ServiceSchema;
   constructor(
-    service: service.Service<Api>,
+    service: Service<Api>,
     options: {
       type: string;
-      handlers: service.ServiceApiHandlers<Api>;
+      handlers: ServiceApiHandlers<Api>;
     },
   ) {
     this.type = options.type;
@@ -31,7 +41,7 @@ class LocalServiceMiddleware<Api extends service.ServiceApi>
     };
   }
 
-  invoke<Args extends any[] = any[], R extends service.Serializable = unknown>(
+  invoke<Args extends any[] = any[], R extends Serializable = unknown>(
     chain: string[],
     args: Args,
     next: () => Promise<R>,
@@ -45,9 +55,7 @@ class LocalServiceMiddleware<Api extends service.ServiceApi>
 }
 export default LocalServiceMiddleware;
 
-function parseSchema(
-  handlers: service.ServiceApiHandlers<unknown>,
-): service.metadata.ServiceSchema {
+function parseSchema(handlers: ServiceApiHandlers<unknown>): ServiceSchema {
   const res: any = {};
   const main = (target: any, source: any) => {
     const keys = Object.keys(source);
@@ -65,9 +73,9 @@ function parseSchema(
 }
 
 function getHandler(
-  handlers: service.ServiceApiHandlers<unknown>,
+  handlers: ServiceApiHandlers<unknown>,
   chain: string[],
-): service.ServiceEndpoint | null {
+): ServiceEndpoint | null {
   let cur: any = handlers;
   while (true) {
     const key = chain.shift();

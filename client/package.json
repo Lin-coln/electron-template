@@ -5,12 +5,11 @@
   "type": "module",
   "main": "./dist/main.js",
   "scripts": {
-    "start": "pnpm run build && electron .",
-    "dev": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/dev.ts",
-    "build": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/build.ts",
-    "pack": ""
+    "start": "ts build && electron .",
+    "build": "ts build"
   },
   "devDependencies": {
+    "@tools/api": "workspace:*",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-typescript": "^12.1.1",

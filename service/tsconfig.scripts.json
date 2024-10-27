@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "..",
+    "baseUrl": "./",
     "module": "esnext",
     "target": "esnext",
     "strict": true,
@@ -12,11 +12,11 @@
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "typeRoots": ["./node_modules/@types"],
     "paths": {
-      "@scripts/*": ["./scripts/*"]
+      "@scripts/*": ["scripts/*"]
     }
   },
-  "include": ["./scripts"],
-  "exclude": ["./node_modules"]
+  "include": ["./scripts/**/*"],
+  "exclude": ["node_modules"]
 }

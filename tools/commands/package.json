@@ -1,0 +1,13 @@
+{
+  "name": "@tools/commands",
+  "type": "module",
+  "main": "./src/main.js",
+  "bin": {
+    "ts": "bin/ts.js"
+  },
+  "devDependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "@tools/api": "workspace:*"
+  }
+}

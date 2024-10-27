@@ -1,4 +1,4 @@
-/// <reference path="../types/index.d.ts" />
+export type * from "./types";
 
 export { default as Service } from "./core/Service";
 export { default as ServiceInvoker } from "./core/ServiceInvoker";

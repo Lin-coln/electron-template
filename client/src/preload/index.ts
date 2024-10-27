@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { Service, ServiceInvoker } from "service";
+import { ServiceApi, ServiceMiddleware, Serializable } from "service";
 
 console.log(`[preload] ServiceManager#services...`);
 const timestamp = Date.now();
@@ -30,10 +31,10 @@ console.log(
 
 /////////////////////////////////////////////////////////////////
 
-class RemoteServiceMiddleware<Api extends service.ServiceApi>
-  implements service.ServiceMiddleware<Api>
+class RemoteServiceMiddleware<Api extends ServiceApi>
+  implements ServiceMiddleware<Api>
 {
-  service: service.Service<Api>;
+  service: Service<Api>;
   type: string;
   constructor(service, type) {
     this.service = service;
@@ -47,7 +48,7 @@ class RemoteServiceMiddleware<Api extends service.ServiceApi>
     return window.electron.service.collectMetadata(this.service.name);
   }
 
-  invoke<Args extends any[] = any[], R extends service.Serializable = unknown>(
+  invoke<Args extends any[] = any[], R extends Serializable = unknown>(
     chain: string[],
     args: Args,
     next: () => Promise<R>,

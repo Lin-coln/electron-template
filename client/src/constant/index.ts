@@ -4,6 +4,9 @@ import path from "node:path";
 const isPackaged = app.isPackaged;
 const appPathname = app.getAppPath();
 
-export const PRELOAD_FILENAME = path.resolve(appPathname, "./dist/preload.js");
+export const PRELOAD_FILENAME = path.resolve(
+  appPathname,
+  "./dist/preload/index.js",
+);
 
 export const INDEX_FILENAME = path.resolve(appPathname, "./views/index.html");

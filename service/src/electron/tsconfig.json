@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2023",
+    "declaration": true,
+    "declarationDir": "../../dist/electron",
+    "outDir": "../../dist/electron",
+    "baseUrl": "../..",
+    "paths": {
+      "@src/*": ["src/*"],
+      "service": ["../../../service"]
+    }
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules"]
+}
