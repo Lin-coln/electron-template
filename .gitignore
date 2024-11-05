@@ -3,6 +3,4 @@ node_modules
 .idea
 
 # workspaces
-**/*/node_modules
 **/*/dist
-**/*/.idea
