@@ -16,7 +16,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types"],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@src/*": ["src/*"]
     }

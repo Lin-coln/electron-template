@@ -1,6 +1,6 @@
 import { RollupOptions } from "rollup";
 import path from "node:path";
-import { projectDirname } from "@scripts//utils";
+import { projectDirname } from "@scripts/utils";
 import { getPlugins } from "@scripts/rollup/getPlugins";
 import { getExternal } from "@scripts/rollup/getExternal";
 import { createManualChunks } from "@scripts/rollup/createManualChunks";

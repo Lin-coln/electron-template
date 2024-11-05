@@ -1,5 +1,7 @@
 packages:
-  - client
-  - view
-  - service
+  - apps/desktop
+  - apps/view
+  - libraries/service
+
+  # internal tools
   - tools/*

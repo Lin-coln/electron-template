@@ -83,6 +83,7 @@ async function startupWindow() {
   }
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
   mainWindow.show();
   console.log(`window started`);
   return mainWindow;

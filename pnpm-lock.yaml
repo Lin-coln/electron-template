@@ -24,14 +24,11 @@ importers:
         specifier: ^5.6.3
         version: registry.npmmirror.com/typescript@5.6.3
 
-  client:
+  apps/desktop:
     dependencies:
       reflect-metadata:
         specifier: ^0.2.2
         version: registry.npmmirror.com/reflect-metadata@0.2.2
-      service:
-        specifier: workspace:*
-        version: link:../service
       tslib:
         specifier: ^2.8.0
         version: registry.npmmirror.com/tslib@2.8.0
@@ -47,7 +44,7 @@ importers:
         version: registry.npmmirror.com/@rollup/plugin-typescript@12.1.1(rollup@4.24.0)(tslib@2.8.0)(typescript@5.6.3)
       '@tools/api':
         specifier: workspace:*
-        version: link:../tools/api
+        version: link:../../tools/api
       '@types/node':
         specifier: ^22.7.9
         version: registry.npmmirror.com/@types/node@22.8.0
@@ -58,49 +55,7 @@ importers:
         specifier: ^4.24.0
         version: registry.npmmirror.com/rollup@4.24.0
 
-  service:
-    dependencies:
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: registry.npmmirror.com/reflect-metadata@0.2.2
-      tslib:
-        specifier: ^2.8.0
-        version: registry.npmmirror.com/tslib@2.8.0
-    devDependencies:
-      '@rollup/plugin-commonjs':
-        specifier: ^28.0.1
-        version: registry.npmmirror.com/@rollup/plugin-commonjs@28.0.1(rollup@4.24.0)
-      '@rollup/plugin-node-resolve':
-        specifier: ^15.3.0
-        version: registry.npmmirror.com/@rollup/plugin-node-resolve@15.3.0(rollup@4.24.0)
-      '@rollup/plugin-typescript':
-        specifier: ^12.1.1
-        version: registry.npmmirror.com/@rollup/plugin-typescript@12.1.1(rollup@4.24.0)(tslib@2.8.0)(typescript@5.6.3)
-      '@types/node':
-        specifier: ^22.7.9
-        version: registry.npmmirror.com/@types/node@22.8.0
-      rollup:
-        specifier: ^4.24.0
-        version: registry.npmmirror.com/rollup@4.24.0
-      rollup-plugin-node-externals:
-        specifier: ^7.1.3
-        version: registry.npmmirror.com/rollup-plugin-node-externals@7.1.3(rollup@4.24.0)
-
-  tools/api: {}
-
-  tools/cli:
-    devDependencies:
-      '@tools/api':
-        specifier: workspace:*
-        version: link:../api
-      chalk:
-        specifier: ^5.3.0
-        version: registry.npmmirror.com/chalk@5.3.0
-      commander:
-        specifier: ^12.1.0
-        version: registry.npmmirror.com/commander@12.1.0
-
-  view:
+  apps/view:
     dependencies:
       react:
         specifier: ^18.3.1
@@ -142,6 +97,48 @@ importers:
       vite:
         specifier: ^5.4.10
         version: registry.npmmirror.com/vite@5.4.10
+
+  libraries/service:
+    dependencies:
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: registry.npmmirror.com/reflect-metadata@0.2.2
+      tslib:
+        specifier: ^2.8.0
+        version: registry.npmmirror.com/tslib@2.8.0
+    devDependencies:
+      '@rollup/plugin-commonjs':
+        specifier: ^28.0.1
+        version: registry.npmmirror.com/@rollup/plugin-commonjs@28.0.1(rollup@4.24.0)
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.3.0
+        version: registry.npmmirror.com/@rollup/plugin-node-resolve@15.3.0(rollup@4.24.0)
+      '@rollup/plugin-typescript':
+        specifier: ^12.1.1
+        version: registry.npmmirror.com/@rollup/plugin-typescript@12.1.1(rollup@4.24.0)(tslib@2.8.0)(typescript@5.6.3)
+      '@types/node':
+        specifier: ^22.7.9
+        version: registry.npmmirror.com/@types/node@22.8.0
+      rollup:
+        specifier: ^4.24.0
+        version: registry.npmmirror.com/rollup@4.24.0
+      rollup-plugin-node-externals:
+        specifier: ^7.1.3
+        version: registry.npmmirror.com/rollup-plugin-node-externals@7.1.3(rollup@4.24.0)
+
+  tools/api: {}
+
+  tools/cli:
+    devDependencies:
+      '@tools/api':
+        specifier: workspace:*
+        version: link:../api
+      chalk:
+        specifier: ^5.3.0
+        version: registry.npmmirror.com/chalk@5.3.0
+      commander:
+        specifier: ^12.1.0
+        version: registry.npmmirror.com/commander@12.1.0
 
 packages:
 
