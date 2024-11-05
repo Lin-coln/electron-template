@@ -1,7 +1,7 @@
 import { app, BrowserWindow, screen } from "electron";
 import path from "node:path";
 import url from "node:url";
-import { INDEX_FILENAME, PRELOAD_FILENAME } from "./constant";
+import { INDEX_FILENAME, INDEX_URL, PRELOAD_FILENAME } from "./constant";
 
 import services from "./services";
 
@@ -75,8 +75,12 @@ async function startupWindow() {
       preload: PRELOAD_FILENAME,
     },
   });
-  // and load the index.html of the app.
-  await mainWindow.loadFile(INDEX_FILENAME);
+
+  if (INDEX_URL) {
+    await mainWindow.loadURL(INDEX_URL);
+  } else {
+    await mainWindow.loadFile(INDEX_FILENAME);
+  }
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
   mainWindow.show();

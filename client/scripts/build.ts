@@ -16,5 +16,6 @@ async function main() {
   await ts("clean");
   await ts("build.main");
   await ts("build.preload");
+  await ts("build.renderer");
   console.log(`[build] done`);
 }
