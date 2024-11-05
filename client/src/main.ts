@@ -3,6 +3,8 @@ import path from "node:path";
 import url from "node:url";
 import { INDEX_FILENAME, PRELOAD_FILENAME } from "./constant";
 
+import services from "./services";
+
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -41,12 +43,13 @@ app.whenReady().then(async () => {
  */
 async function startup() {
   await startupService();
-  await startupWindow();
+  const mainWindow = await startupWindow();
+  // services.addWebContentsPeer(mainWindow.webContents);
 }
 
 async function startupService() {
   //
-  const services = await import("./services").then((mod) => mod.default);
+  // const services = await import("./services").then((mod) => mod.default);
   await services.initialize();
   console.log(`service started`);
 }
@@ -72,12 +75,11 @@ async function startupWindow() {
       preload: PRELOAD_FILENAME,
     },
   });
-
   // and load the index.html of the app.
   await mainWindow.loadFile(INDEX_FILENAME);
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
   mainWindow.show();
-
   console.log(`window started`);
+  return mainWindow;
 }

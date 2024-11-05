@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "es2023",
+    "types": ["node"],
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "baseUrl": "../..",
+    "paths": {
+      "@src/*": ["src/*"]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "@tools/commands",
+  "name": "@tools/cli",
   "type": "module",
   "main": "./src/main.js",
   "bin": {

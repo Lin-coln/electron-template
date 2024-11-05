@@ -1,4 +1,3 @@
-
 > just an electron template for myself
 
 ---
@@ -30,3 +29,22 @@
 - ipc
 - websocket
 - http
+
+---
+
+## PresetTools
+
+@tools/api
+
+```ts
+interface api {
+  // execute ts script
+  ts(target: string): Promise<void>;
+}
+```
+
+@tools/commands
+
+```md
+ts <target>
+```

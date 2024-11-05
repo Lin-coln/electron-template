@@ -1,6 +1,5 @@
 {
   "name": "@tools/api",
   "type": "module",
-  "main": "./src/main.js",
-  "module": "./src/main.js"
+  "main": "index.js"
 }

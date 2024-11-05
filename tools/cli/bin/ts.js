@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Argument, Command } from "commander";
-import { ts } from "@tools/api";
+import { ts } from "@tools/api/index.js";
 
 const cli = new Command();
 cli

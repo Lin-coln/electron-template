@@ -34,7 +34,6 @@ async function main(target) {
   async function resolveTsConfig() {
     return [
       path.resolve(projectDirname, `./scripts/tsconfig.json`),
-      path.resolve(projectDirname, `./tsconfig.scripts.json`),
       path.resolve(projectDirname, `./tsconfig.json`),
     ].find((x) => fs.existsSync(x));
   }

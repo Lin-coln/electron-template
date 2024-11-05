@@ -14,7 +14,7 @@ process.on("uncaughtException", async (error) => {
   process.exit(1);
 });
 
-const callbacks = new Set();
+const callbacks = new Set<Function>();
 async function cleanUp() {
   for (const callback of callbacks.values()) {
     await callback();

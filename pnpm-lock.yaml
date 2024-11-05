@@ -8,9 +8,9 @@ importers:
 
   .:
     devDependencies:
-      '@tools/commands':
+      '@tools/cli':
         specifier: workspace:*
-        version: link:tools/commands
+        version: link:tools/cli
       prettier:
         specifier: ^3.3.3
         version: registry.npmmirror.com/prettier@3.3.3
@@ -51,6 +51,9 @@ importers:
       electron:
         specifier: ^33.0.2
         version: registry.npmmirror.com/electron@33.0.2
+      peerjs:
+        specifier: ^1.5.4
+        version: registry.npmmirror.com/peerjs@1.5.4
       rollup:
         specifier: ^4.24.0
         version: registry.npmmirror.com/rollup@4.24.0
@@ -88,7 +91,7 @@ importers:
 
   tools/api: {}
 
-  tools/commands:
+  tools/cli:
     devDependencies:
       '@tools/api':
         specifier: workspace:*
@@ -389,6 +392,13 @@ packages:
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.0.tgz}
     name: '@jridgewell/sourcemap-codec'
     version: 1.5.0
+    dev: true
+
+  registry.npmmirror.com/@msgpack/msgpack@2.8.0:
+    resolution: {integrity: sha512-h9u4u/jiIRKbq25PM+zymTyW6bhTzELvOoUd+AvYriWOAKpLGnIamaET3pnHYoI5iYphAHBI4ayx0MehR+VVPQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@msgpack/msgpack/-/msgpack-2.8.0.tgz}
+    name: '@msgpack/msgpack'
+    version: 2.8.0
+    engines: {node: '>= 10'}
     dev: true
 
   registry.npmmirror.com/@rollup/plugin-commonjs@28.0.1(rollup@4.24.0):
@@ -973,6 +983,12 @@ packages:
     version: 2.0.2
     dev: true
 
+  registry.npmmirror.com/eventemitter3@4.0.7:
+    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/eventemitter3/-/eventemitter3-4.0.7.tgz}
+    name: eventemitter3
+    version: 4.0.7
+    dev: true
+
   registry.npmmirror.com/extract-zip@2.0.1:
     resolution: {integrity: sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/extract-zip/-/extract-zip-2.0.1.tgz}
     name: extract-zip
@@ -1322,6 +1338,25 @@ packages:
     version: 1.0.7
     dev: true
 
+  registry.npmmirror.com/peerjs-js-binarypack@2.1.0:
+    resolution: {integrity: sha512-YIwCC+pTzp3Bi8jPI9UFKO0t0SLo6xALnHkiNt/iUFmUUZG0fEEmEyFKvjsDKweiFitzHRyhuh6NvyJZ4nNxMg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/peerjs-js-binarypack/-/peerjs-js-binarypack-2.1.0.tgz}
+    name: peerjs-js-binarypack
+    version: 2.1.0
+    engines: {node: '>= 14.0.0'}
+    dev: true
+
+  registry.npmmirror.com/peerjs@1.5.4:
+    resolution: {integrity: sha512-yFsoLMnurJKlQbx6kVSBpOp+AlNldY1JQS2BrSsHLKCZnq6t7saHleuHM5svuLNbQkUJXHLF3sKOJB1K0xulOw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/peerjs/-/peerjs-1.5.4.tgz}
+    name: peerjs
+    version: 1.5.4
+    engines: {node: '>= 14'}
+    dependencies:
+      '@msgpack/msgpack': registry.npmmirror.com/@msgpack/msgpack@2.8.0
+      eventemitter3: registry.npmmirror.com/eventemitter3@4.0.7
+      peerjs-js-binarypack: registry.npmmirror.com/peerjs-js-binarypack@2.1.0
+      webrtc-adapter: registry.npmmirror.com/webrtc-adapter@9.0.1
+    dev: true
+
   registry.npmmirror.com/pend@1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pend/-/pend-1.2.0.tgz}
     name: pend
@@ -1459,6 +1494,12 @@ packages:
       fsevents: registry.npmmirror.com/fsevents@2.3.3
     dev: true
 
+  registry.npmmirror.com/sdp@3.2.0:
+    resolution: {integrity: sha512-d7wDPgDV3DDiqulJjKiV2865wKsJ34YI+NDREbm+FySq6WuKOikwyNQcm+doLAZ1O6ltdO0SeKle2xMpN3Brgw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/sdp/-/sdp-3.2.0.tgz}
+    name: sdp
+    version: 3.2.0
+    dev: true
+
   registry.npmmirror.com/semver-compare@1.0.0:
     resolution: {integrity: sha512-YM3/ITh2MJ5MtzaM429anh+x2jiLVjqILF4m4oyQB18W7Ggea7BfqdH/wGMK7dDiMghv/6WG7znWMwUDzJiXow==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/semver-compare/-/semver-compare-1.0.0.tgz}
     name: semver-compare
@@ -1567,6 +1608,15 @@ packages:
     name: universalify
     version: 0.1.2
     engines: {node: '>= 4.0.0'}
+    dev: true
+
+  registry.npmmirror.com/webrtc-adapter@9.0.1:
+    resolution: {integrity: sha512-1AQO+d4ElfVSXyzNVTOewgGT/tAomwwztX/6e3totvyyzXPvXIIuUUjAmyZGbKBKbZOXauuJooZm3g6IuFuiNQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/webrtc-adapter/-/webrtc-adapter-9.0.1.tgz}
+    name: webrtc-adapter
+    version: 9.0.1
+    engines: {node: '>=6.0.0', npm: '>=3.10.0'}
+    dependencies:
+      sdp: registry.npmmirror.com/sdp@3.2.0
     dev: true
 
   registry.npmmirror.com/wrappy@1.0.2:

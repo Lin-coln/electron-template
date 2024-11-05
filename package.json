@@ -10,6 +10,6 @@
     "prettier": "^3.3.3",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",
-    "@tools/commands": "workspace:*"
+    "@tools/cli": "workspace:*"
   }
 }
