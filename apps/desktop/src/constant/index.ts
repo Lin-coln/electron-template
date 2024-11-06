@@ -18,3 +18,7 @@ export const INDEX_URL = args.INDEX_URL ?? null;
 export const INDEX_FILENAME = isPackaged
   ? path.resolve(appPathname, "./renderer/index.html")
   : path.resolve(appPathname, "dist", "./renderer/index.html");
+
+export const ICON_FILENAME = isPackaged
+  ? path.resolve(appPathname, "./resources/icons/icon.ico")
+  : path.resolve(appPathname, "./resources/icons/icon.ico");

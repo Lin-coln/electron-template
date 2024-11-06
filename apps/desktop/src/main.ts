@@ -1,8 +1,14 @@
 import { app, BrowserWindow, screen } from "electron";
 import path from "node:path";
 import url from "node:url";
-import { INDEX_FILENAME, INDEX_URL, PRELOAD_FILENAME } from "./constant";
+import {
+  ICON_FILENAME,
+  INDEX_FILENAME,
+  INDEX_URL,
+  PRELOAD_FILENAME,
+} from "./constant";
 import { installChromeExtensions } from "@lib/electron-utils";
+import * as process from "node:process";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,19 +70,41 @@ async function startupWindow() {
   const x = targetDisplay.bounds.x + (targetDisplay.bounds.width - width) / 2;
   const y = targetDisplay.bounds.y + (targetDisplay.bounds.height - height) / 2;
 
-  // Create the browser window.
-  const mainWindow: BrowserWindow = new BrowserWindow({
+  const options: Electron.BrowserWindowConstructorOptions = {
+    icon: ICON_FILENAME,
     width,
     height,
     x,
     y,
     show: false,
+    autoHideMenuBar: true,
     webPreferences: {
+      preload: PRELOAD_FILENAME,
+      additionalArguments: [], // add process.argv to preload script
       nodeIntegration: false,
       contextIsolation: true,
-      preload: PRELOAD_FILENAME,
+      sandbox: false,
+      webSecurity: true,
+      // webSecurity: !isDev,
+      spellcheck: false,
     },
-  });
+  };
+  if (process.platform === "darwin") {
+    Object.assign(options, {
+      frame: false,
+      transparency: true,
+      backgroundColor: undefined,
+      titleBarStyle: "hiddenInset",
+      vibrancy: "under-window", // blur
+      visualEffectState: "active",
+      transparent: true,
+      trafficLightPosition: {
+        x: 18,
+        y: 18,
+      },
+    } as Electron.BrowserWindowConstructorOptions);
+  }
+  const mainWindow: BrowserWindow = new BrowserWindow(options);
 
   if (INDEX_URL) {
     await mainWindow.loadURL(INDEX_URL);
