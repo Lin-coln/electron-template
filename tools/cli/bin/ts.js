@@ -9,7 +9,7 @@ cli
   .description(`run ts script`)
   .usage(`<target>`)
   .addArgument(arg_target())
-  .action(ts);
+  .action((target) => ts(target));
 void cli.parseAsync(process.argv, { from: "node" });
 function arg_target() {
   return new Argument(`<target>`, "ts script");

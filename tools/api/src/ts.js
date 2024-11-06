@@ -4,7 +4,7 @@ import fs from "fs";
 
 export default main;
 
-async function main(target) {
+async function main(target, env = {}) {
   const projectDirname = await resolveProjectDirname();
 
   let filename;
@@ -15,7 +15,7 @@ async function main(target) {
   }
 
   const tsconfig = await resolveTsConfig();
-  await runScript({ filename, tsconfig });
+  await runScript({ filename, tsconfig, env });
 
   async function resolveScriptFilename(target) {
     const targets =
@@ -49,10 +49,14 @@ async function resolveProjectDirname() {
   }
 }
 
-async function runScript({ filename, tsconfig }) {
+async function runScript({ filename, tsconfig, env }) {
   await new Promise((resolve) => {
     child_process.execSync(`tsx --tsconfig ${tsconfig} ${filename}`, {
       stdio: "inherit",
+      env: {
+        ...process.env,
+        ...env,
+      },
     });
     resolve();
   });

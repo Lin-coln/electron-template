@@ -23,8 +23,8 @@ const args: Record<string, string | boolean> = process.argv
   }, {});
 
 export const PRELOAD_FILENAME = isPackaged
-  ? path.resolve(appPathname, "./preload/index.js")
-  : path.resolve(appPathname, "dist", "./preload/index.js");
+  ? path.resolve(appPathname, "./preload/index.cjs")
+  : path.resolve(appPathname, "dist", "./preload/index.cjs");
 
 export const INDEX_URL = args.INDEX_URL ? (args.INDEX_URL as string) : null;
 

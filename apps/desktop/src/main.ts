@@ -3,10 +3,12 @@ import path from "node:path";
 import url from "node:url";
 import { INDEX_FILENAME, INDEX_URL, PRELOAD_FILENAME } from "./constant";
 
-import services from "./services";
+// import services from "./services";
+// import { FOOBAR } from "@lib/electron-utils";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// console.log(FOOBAR);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -50,7 +52,7 @@ async function startup() {
 async function startupService() {
   //
   // const services = await import("./services").then((mod) => mod.default);
-  await services.initialize();
+  // await services.initialize();
   console.log(`service started`);
 }
 
