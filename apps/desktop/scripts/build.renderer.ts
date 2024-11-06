@@ -5,7 +5,7 @@ import path from "node:path";
 void main();
 
 async function main() {
-  const dist = path.resolve(projectDirname, "./dist/view");
+  const dist = path.resolve(projectDirname, "./dist/renderer");
   const cwd = path.resolve(projectDirname, "../view");
   const env = {
     VITE_CONFIG_BASE: "./",

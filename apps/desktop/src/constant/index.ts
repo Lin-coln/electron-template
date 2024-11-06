@@ -29,5 +29,5 @@ export const PRELOAD_FILENAME = isPackaged
 export const INDEX_URL = args.INDEX_URL ? (args.INDEX_URL as string) : null;
 
 export const INDEX_FILENAME = isPackaged
-  ? path.resolve(appPathname, "./view/index.html")
-  : path.resolve(appPathname, "dist", "./view/index.html");
+  ? path.resolve(appPathname, "./renderer/index.html")
+  : path.resolve(appPathname, "dist", "./renderer/index.html");

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "main": "./dist/main.js",
+  "main": "./dist/main/index.js",
   "scripts": {
     "clean": "ts clean",
     "build": "ts build",
