@@ -68,12 +68,14 @@ function main() {
   };
 
   logger.log(`end`);
+  console.log("\n\n\n");
 }
 
 function usePreloadLogger() {
+  const color = "#518d57";
   const prefix = [
     `%c` + "preload",
-    `border-radius: 4px; background: #518d57; color: white; padding: 2px 6px`,
+    `border-radius: 4px; background: ${color}; color: white; padding: 2px 6px`,
   ];
 
   return {

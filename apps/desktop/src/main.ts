@@ -2,6 +2,7 @@ import { app, BrowserWindow, screen } from "electron";
 import path from "node:path";
 import url from "node:url";
 import { INDEX_FILENAME, INDEX_URL, PRELOAD_FILENAME } from "./constant";
+import { installChromeExtensions } from "@lib/electron-utils";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,7 +15,6 @@ app.whenReady().then(async () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length !== 0) return;
-
     startupWindow();
   });
 
@@ -41,6 +41,11 @@ app.whenReady().then(async () => {
  */
 async function startup() {
   await startupService();
+
+  if (!app.isPackaged) {
+    await installChromeExtensions(["REACT_DEVELOPER_TOOLS"]);
+  }
+
   const mainWindow = await startupWindow();
   // services.addWebContentsPeer(mainWindow.webContents);
 }

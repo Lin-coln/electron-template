@@ -1,5 +1,5 @@
 {
-  "name": "@lib/electron-utils",
+  "name": "@lib/$name",
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -13,10 +13,6 @@
       "import": "./src/*.ts",
       "require": "./src/*.ts"
     }
-  },
-  "peerDependencies": {
-    "electron": "*",
-    "electron-devtools-installer": "*"
   },
   "devDependencies": {
     "@types/node": "^22.7.9"
