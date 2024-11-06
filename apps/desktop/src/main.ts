@@ -3,12 +3,8 @@ import path from "node:path";
 import url from "node:url";
 import { INDEX_FILENAME, INDEX_URL, PRELOAD_FILENAME } from "./constant";
 
-// import services from "./services";
-import { FOOBAR } from "@lib/electron-utils";
-
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log(FOOBAR);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

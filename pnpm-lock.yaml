@@ -109,6 +109,10 @@ importers:
       electron:
         specifier: '*'
         version: registry.npmmirror.com/electron@33.0.2
+    devDependencies:
+      '@types/node':
+        specifier: ^22.7.9
+        version: registry.npmmirror.com/@types/node@22.8.0
 
   libraries/service:
     dependencies:
