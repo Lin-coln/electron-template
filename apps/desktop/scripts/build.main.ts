@@ -1,6 +1,7 @@
 import { build } from "tsup";
 import path from "node:path";
 import { projectDirname } from "@scripts/utils";
+import { getNoExternal } from "@scripts/tsup/getNoExternal";
 
 void main();
 async function main() {
@@ -10,12 +11,17 @@ async function main() {
     outDir: path.resolve(projectDirname, "./dist"),
     tsconfig: path.resolve(projectDirname, "./src/tsconfig.json"),
     dts: false,
-    format: "esm",
+    format: ["esm"],
     target: "esnext",
     minify: false,
     clean: true,
-    splitting: false,
+    // splitting: false,
+    splitting: true,
     sourcemap: true,
     skipNodeModulesBundle: true,
+    noExternal: getNoExternal(),
+    // // watch config
+    // watch: [],
+    // ignoreWatch: [],
   });
 }

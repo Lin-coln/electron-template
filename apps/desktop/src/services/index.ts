@@ -6,8 +6,11 @@ import { ipcMain } from "electron";
 // import ElectronWebContentsPeer from "@src/lambda/src/ElectronWebcontentsPeer";
 // let manager: LambdaManager;
 
+import { FOOBAR } from "@lib/electron-utils";
+
 export default {
   async initialize() {
+    console.log(FOOBAR);
     ipcMain.on(`ServiceManager#services`, async (event) => {
       // event.returnValue = Array.from(Service.Manager.services.keys());
       event.returnValue = [];

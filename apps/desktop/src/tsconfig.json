@@ -1,7 +1,7 @@
 {
-  "extends": "../tsconfig.extend.json",
+  "extends": "../tsconfig.node.json",
   "compilerOptions": {
-    "types": ["node"],
+    "moduleResolution": "bundler",
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "noImplicitAny": false,
