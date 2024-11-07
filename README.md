@@ -14,21 +14,11 @@
   - chrome: 130
   - node: 20.18.0
 
-## Services
+## Build
 
-- system services (main_process)
-  - window service
-  - ...
-- other services (child_process)
-  - storage service
-  - download service
-  - ...
-
-### service_request
-
-- ipc
-- websocket
-- http
+- build: compile all ts files and dependencies into executable js code
+- pack: package the compiled products and resource files into a standard desktop application
+- make: make the packaged application into an installer file
 
 ---
 
@@ -39,7 +29,7 @@
 ```ts
 interface api {
   // execute ts script
-  ts(target: string): Promise<void>;
+  ts(target: string, env?: Record<string, string | boolean>): Promise<void>;
 }
 ```
 

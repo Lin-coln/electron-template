@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "main": "./dist/main/index.js",
+  "main": "./src/main.ts",
   "scripts": {
     "clean": "ts clean",
     "build": "ts build",
     "dev:render": "ts dev.renderer",
     "dev:main": "ts dev.main",
-    "build:preview": "ts build && ts preview",
-    "preview": "ts preview"
+    "preview": "ts preview",
+    "build-preview": "ts build && ts preview",
+    "build-installer": "ts build && ts pack.darwin && ts make.darwin"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.1",
@@ -19,9 +20,11 @@
     "@tools/api": "workspace:*",
     "@types/node": "^22.7.9",
     "electron": "^33.0.2",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-installer-dmg": "^5.0.1",
+    "electron-packager": "^17.1.2",
     "rollup": "^4.24.0",
-    "tsup": "^8.3.5",
-    "electron-devtools-installer": "^3.2.0"
+    "tsup": "^8.3.5"
   },
   "dependencies": {
     "@lib/electron-utils": "workspace:*",

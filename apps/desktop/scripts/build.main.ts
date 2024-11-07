@@ -2,6 +2,8 @@ import { build } from "tsup";
 import path from "node:path";
 import { projectDirname } from "@scripts/utils";
 import { getNoExternal } from "@scripts/tsup/getNoExternal";
+import fs from "fs";
+import { resolveAppConfig } from "@appConfig";
 
 void main();
 async function main() {
@@ -26,4 +28,24 @@ async function main() {
     // watch: [],
     // ignoreWatch: [],
   });
+
+  // generate package.json
+  const appCfg = await resolveAppConfig();
+  await fs.promises.writeFile(
+    path.resolve(projectDirname, "./dist/package.json"),
+    JSON.stringify(
+      {
+        name: appCfg.app_name,
+        author: appCfg.author,
+        version: appCfg.version,
+        private: true,
+        type: "module",
+        main: "./main/index.js",
+        homepage: "./",
+      },
+      null,
+      2,
+    ),
+    "utf8",
+  );
 }

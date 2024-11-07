@@ -99,8 +99,8 @@ async function startupWindow() {
       visualEffectState: "active",
       transparent: true,
       trafficLightPosition: {
-        x: 18,
-        y: 18,
+        x: 12,
+        y: 12,
       },
     } as Electron.BrowserWindowConstructorOptions);
   }

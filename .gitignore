@@ -4,4 +4,7 @@ node_modules
 
 # workspaces
 **/*/dist
+**/*/dist-*
 **/*/.idea
+
+

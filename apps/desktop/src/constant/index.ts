@@ -11,13 +11,13 @@ const args = getApplicationArgs<{
 
 export const PRELOAD_FILENAME = isPackaged
   ? path.resolve(appPathname, "./preload/index.cjs")
-  : path.resolve(appPathname, "dist", "./preload/index.cjs");
+  : path.resolve(appPathname, "./preload/index.cjs");
 
 export const INDEX_URL = args.INDEX_URL ?? null;
 
 export const INDEX_FILENAME = isPackaged
   ? path.resolve(appPathname, "./renderer/index.html")
-  : path.resolve(appPathname, "dist", "./renderer/index.html");
+  : path.resolve(appPathname, "./renderer/index.html");
 
 export const ICON_FILENAME = isPackaged
   ? path.resolve(appPathname, "./resources/icons/icon.ico")

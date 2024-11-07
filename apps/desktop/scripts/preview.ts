@@ -15,7 +15,7 @@ async function main() {
     .join(" ");
   child_process.execSync(`electron . ${args_str}`, {
     stdio: "inherit",
-    cwd: path.resolve(projectDirname, "."),
+    cwd: path.resolve(projectDirname, "./dist"),
     env: {
       ...process.env,
       ...env,

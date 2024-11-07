@@ -6,9 +6,14 @@ void clean();
 
 async function clean() {
   console.log(`[clean] cleaning...`);
-  const dirname = path.resolve(projectDirname, "./dist");
-  if (!fs.existsSync(dirname)) return;
-  await fs.promises.rm(dirname, {
-    recursive: true,
-  });
+  const targets = ["./dist", "./dist-pack"];
+  await Promise.all(
+    targets.map(async (target) => {
+      const dirname = path.resolve(projectDirname, target);
+      if (!fs.existsSync(dirname)) return;
+      await fs.promises.rm(dirname, {
+        recursive: true,
+      });
+    }),
+  );
 }

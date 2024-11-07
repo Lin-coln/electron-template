@@ -8,6 +8,7 @@
       <excludeFolder url="file://$MODULE_DIR$/apps/desktop/dist" />
       <excludeFolder url="file://$MODULE_DIR$/apps/view/dist" />
       <excludeFolder url="file://$MODULE_DIR$/libraries/service-old/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/desktop/dist-pack" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

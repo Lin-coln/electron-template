@@ -1,14 +1,15 @@
 {
   "extends": "../tsconfig.node.json",
   "compilerOptions": {
-    "types": ["node"],
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "noImplicitAny": false,
     "sourceMap": true,
     "baseUrl": "..",
     "paths": {
-      "@scripts/*": ["scripts/*"]
+      "@scripts/*": ["scripts/*"],
+      "@appConfig": ["app.config.ts"]
     }
-  }
+  },
+  "include": ["../app.config.ts", "./**/*"]
 }
