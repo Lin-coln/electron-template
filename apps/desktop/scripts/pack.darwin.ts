@@ -27,9 +27,6 @@ async function main() {
   const appConfig = await resolveAppConfig();
 
   const resourcesDirname = path.resolve(projectDirname, "resources");
-  const extra_resource = await fs.promises
-    .readdir(resourcesDirname)
-    .then((files) => files.map((file) => path.resolve(resourcesDirname, file)));
   const cfg: PackageConfig = {
     ...appConfig,
     arch: "arm64",
@@ -37,7 +34,7 @@ async function main() {
     icon: path.resolve(projectDirname, "./resources/icons/icon.icns"),
     input: path.resolve(projectDirname, DIST),
     output: path.resolve(projectDirname, DIST_PACK),
-    extra_resource,
+    extra_resource: [resourcesDirname],
   };
 
   const options = createPackageOptions(cfg);
