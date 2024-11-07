@@ -14,8 +14,8 @@ void main().then(
 async function main() {
   console.log(`[build] start`);
   await ts("clean");
-  await ts("build.main");
-  await ts("build.preload");
-  await ts("build.renderer");
+  await ts("build/main");
+  await ts("build/preload");
+  await ts("build/renderer");
   console.log(`[build] done`);
 }

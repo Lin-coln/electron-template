@@ -5,13 +5,12 @@ import path from "node:path";
 void main();
 
 async function main() {
-  const dist = path.resolve(projectDirname, "./dist/renderer");
   const cwd = path.resolve(projectDirname, "../view");
   const env = {
-    VITE_CONFIG_BASE: "./",
-    VITE_CONFIG_DIST: dist,
+    // VITE_CONFIG_BASE: "./",
+    // VITE_CONFIG_DIST: dist,
   };
-  child_process.execSync(`pnpm run build --emptyOutDir`, {
+  child_process.execSync(`pnpm run dev`, {
     stdio: "inherit",
     cwd: cwd,
     env: {

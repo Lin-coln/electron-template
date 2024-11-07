@@ -2,6 +2,7 @@ import child_process from "node:child_process";
 import path from "node:path";
 import { projectDirname } from "@scripts/utils";
 import process from "node:process";
+import { DIST } from "@scripts/utils/constant";
 
 void main();
 async function main() {
@@ -15,7 +16,7 @@ async function main() {
     .join(" ");
   child_process.execSync(`electron . ${args_str}`, {
     stdio: "inherit",
-    cwd: path.resolve(projectDirname, "./dist"),
+    cwd: path.resolve(projectDirname, DIST),
     env: {
       ...process.env,
       ...env,

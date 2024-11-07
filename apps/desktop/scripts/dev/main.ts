@@ -13,8 +13,8 @@ void main().then(
 
 async function main() {
   await ts("clean");
-  await ts("build.main");
-  await ts("build.preload");
+  await ts("build/main");
+  await ts("build/preload");
   await ts("preview", {
     INDEX_URL: `http://localhost:5173`,
   });

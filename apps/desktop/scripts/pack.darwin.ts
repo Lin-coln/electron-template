@@ -2,6 +2,8 @@ import pack, { Options } from "electron-packager";
 import path from "node:path";
 import { projectDirname } from "@scripts/utils";
 import { resolveAppConfig } from "@appConfig";
+import fs from "fs";
+import { DIST, DIST_PACK } from "@scripts/utils/constant";
 
 interface PackageConfig {
   app_name: string;
@@ -23,13 +25,19 @@ interface PackageConfig {
 void main();
 async function main() {
   const appConfig = await resolveAppConfig();
+
+  const resourcesDirname = path.resolve(projectDirname, "resources");
+  const extra_resource = await fs.promises
+    .readdir(resourcesDirname)
+    .then((files) => files.map((file) => path.resolve(resourcesDirname, file)));
   const cfg: PackageConfig = {
     ...appConfig,
     arch: "arm64",
     platform: "darwin",
     icon: path.resolve(projectDirname, "./resources/icons/icon.icns"),
-    input: path.resolve(projectDirname, "./dist"),
-    output: path.resolve(projectDirname, "./dist-pack"),
+    input: path.resolve(projectDirname, DIST),
+    output: path.resolve(projectDirname, DIST_PACK),
+    extra_resource,
   };
 
   const options = createPackageOptions(cfg);

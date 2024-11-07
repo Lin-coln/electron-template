@@ -9,7 +9,6 @@ interface ApplicationConfig {
   copyright: string;
   //
   protocols?: string[];
-  extra_resource?: string[];
 }
 
 export async function resolveAppConfig() {
@@ -24,7 +23,6 @@ export async function resolveAppConfig() {
 
     // ...
     protocols: [],
-    extra_resource: [],
   };
   return cfg;
 }

@@ -7,8 +7,8 @@
   "scripts": {
     "clean": "ts clean",
     "build": "ts build",
-    "dev:render": "ts dev.renderer",
-    "dev:main": "ts dev.main",
+    "dev:render": "ts dev/renderer",
+    "dev:main": "ts dev/main",
     "preview": "ts preview",
     "build-preview": "ts build && ts preview",
     "build-installer": "ts build && ts pack.darwin && ts make.darwin"
