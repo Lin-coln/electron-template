@@ -1,6 +1,6 @@
 import { Options } from "tsup";
 
-export function getNoExternal(): Options["noExternal"] {
+export function getTsupNoExternal(): Options["noExternal"] {
   return [
     // libs
     "@lib/electron-utils",

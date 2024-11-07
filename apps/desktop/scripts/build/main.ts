@@ -1,7 +1,7 @@
 import { build } from "tsup";
 import path from "node:path";
 import { projectDirname } from "@scripts/utils";
-import { getNoExternal } from "@scripts/tsup/getNoExternal";
+import { getTsupNoExternal } from "@scripts/utils/getTsupNoExternal";
 import fs from "fs";
 import { resolveAppConfig } from "@appConfig";
 import { DIST, INPUT_MAIN, OUTPUT_MAIN } from "@scripts/utils/constant";
@@ -28,7 +28,7 @@ async function main() {
     splitting: true,
     sourcemap: true,
     skipNodeModulesBundle: true,
-    noExternal: getNoExternal(),
+    noExternal: getTsupNoExternal(),
     // // watch config
     // watch: [],
     // ignoreWatch: [],

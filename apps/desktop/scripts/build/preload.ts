@@ -1,7 +1,7 @@
 import { build } from "tsup";
 import path from "node:path";
 import { projectDirname } from "@scripts/utils";
-import { getNoExternal } from "@scripts/tsup/getNoExternal";
+import { getTsupNoExternal } from "@scripts/utils/getTsupNoExternal";
 import { INPUT_PRELOAD, OUTPUT_PRELOAD } from "@scripts/utils/constant";
 
 void main();
@@ -19,6 +19,6 @@ async function main() {
     splitting: true,
     sourcemap: true,
     skipNodeModulesBundle: true,
-    noExternal: getNoExternal(),
+    noExternal: getTsupNoExternal(),
   });
 }

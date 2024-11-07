@@ -14,16 +14,12 @@
     "build-installer": "ts build && ts pack.darwin && ts make.darwin"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.1",
-    "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-typescript": "^12.1.1",
     "@tools/api": "workspace:*",
     "@types/node": "^22.7.9",
     "electron": "^33.0.2",
     "electron-devtools-installer": "^3.2.0",
     "electron-installer-dmg": "^5.0.1",
     "electron-packager": "^17.1.2",
-    "rollup": "^4.24.0",
     "tsup": "^8.3.5"
   },
   "dependencies": {
