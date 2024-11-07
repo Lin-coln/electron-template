@@ -14,13 +14,13 @@ process.on("uncaughtException", async (error) => {
   process.exit(1);
 });
 
-const callbacks = new Set<Function>();
+const callbacks = new Set();
 async function cleanUp() {
   for (const callback of callbacks.values()) {
     await callback();
   }
 }
 
-export default function useCleanup(cb: () => unknown) {
+export default function useCleanup(cb) {
   callbacks.add(cb);
 }
