@@ -7,6 +7,7 @@ import { DIST_PACK } from "@scripts/utils/constant";
 void main();
 
 async function main() {
+  console.log(`[make] make dmg installer...`);
   const appConfig = await resolveAppConfig();
   const cfg = {
     ...appConfig,
@@ -33,4 +34,5 @@ async function main() {
     //
     // ]
   });
+  console.log(`[make] done.`);
 }

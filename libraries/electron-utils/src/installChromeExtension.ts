@@ -74,6 +74,7 @@ async function requestInstaller(): Promise<{
   ): Promise<string>;
   PRESET_EXTENSION: Record<PresetExtension, ExtensionReference>;
 }> {
+  // todo: remove "electron-devtools-installer"
   const { default: installExtension, ...PRESET_EXTENSION } = await import(
     "electron-devtools-installer"
   ).then((mod) => mod.default as any);

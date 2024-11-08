@@ -24,6 +24,7 @@ interface PackageConfig {
 
 void main();
 async function main() {
+  console.log(`[pack] packing darwin application`);
   const appConfig = await resolveAppConfig();
 
   const resourcesDirname = path.resolve(projectDirname, "resources");
@@ -39,6 +40,7 @@ async function main() {
 
   const options = createPackageOptions(cfg);
   await pack(options);
+  console.log(`[pack] darwin application packed`);
 }
 
 function createPackageOptions(cfg: PackageConfig): Options {

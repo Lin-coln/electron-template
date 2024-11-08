@@ -104,7 +104,7 @@ importers:
   libraries/electron-utils:
     dependencies:
       electron:
-        specifier: '*'
+        specifier: '>=33'
         version: registry.npmmirror.com/electron@33.0.2
       electron-devtools-installer:
         specifier: '*'

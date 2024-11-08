@@ -15,7 +15,7 @@
     }
   },
   "peerDependencies": {
-    "electron": "*",
+    "electron": ">=33",
     "electron-devtools-installer": "*"
   },
   "devDependencies": {
