@@ -6,13 +6,10 @@
   "main": "./src/main.ts",
   "scripts": {
     "clean": "ts clean",
-    "build-preview": "ts build && ts build/preview",
-    "build-installer": "ts build && ts pack.darwin && ts make.darwin",
-    "dev": "ts dev",
     "dev:render": "ts dev/renderer",
     "dev:main": "ts dev/main",
-    "dev:preload": "ts dev/preload",
-    "dev:start": "ts dev/startup",
+    "build-preview": "ts build && ts build/preview",
+    "build-installer": "ts build && ts pack.darwin && ts make.darwin",
     "build": "ts build",
     "preview": "ts build/preview"
   },
