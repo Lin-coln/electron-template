@@ -5,20 +5,24 @@ import {
   BrowserWindowConstructorOptions,
 } from "electron";
 import OpenDevToolsOptions = Electron.OpenDevToolsOptions;
+import Display = Electron.Display;
 
-class DevToolsWindow extends BrowserWindow {
+export class DevToolsWindow extends BrowserWindow {
   // hostWebContents: WebContents;
   hostWindow: BrowserWindow;
   // hostOpenDevTools: (options?: OpenDevToolsOptions) => void;
 
   constructor(
-    opts: BrowserWindowConstructorOptions,
-    // hostWebContents: WebContents,
     hostWindow: BrowserWindow,
+    // hostWebContents: WebContents,
+    opts: BrowserWindowConstructorOptions,
   ) {
-    super(opts);
+    super({ show: false, ...opts });
     // this.hostWebContents = hostWebContents;
     this.hostWindow = hostWindow;
+    this.hostWindow.on("closed", () => {
+      if (!this.isDestroyed()) this.destroy();
+    });
     this.hostWindow.webContents.setDevToolsWebContents(this.webContents);
     this.hostWindow.webContents.on("devtools-opened", async () => {
       this.showInactive();
@@ -55,30 +59,42 @@ class DevToolsWindow extends BrowserWindow {
  * so that u can update its bounds and
  * use showInactive to prevent focus devToolsWindow when it opened trigger by reboot
  */
-export function configDevToolsWindow(hostWindow: BrowserWindow) {
-  const hostBounds = hostWindow.getBounds();
-  const hostDisplay = screen.getDisplayNearestPoint({
-    x: hostBounds.x,
-    y: hostBounds.y,
-  });
-  // right placement of host window
-  const devBounds: Rectangle = { x: 0, y: 0, width: 800, height: 1000 };
-  devBounds.x +=
-    hostBounds.x +
-    hostBounds.width +
-    (hostDisplay.bounds.x +
-      hostDisplay.bounds.width -
-      hostBounds.x -
-      hostBounds.width -
-      devBounds.width) /
-      2;
-  devBounds.y +=
-    hostDisplay.bounds.y + (hostDisplay.bounds.height - devBounds.height) / 2;
 
-  const devToolsWindow = new DevToolsWindow(
-    { show: false, ...devBounds },
-    hostWindow,
-  );
+export function getBounds({
+  display,
+  position,
+  width,
+  height,
+  margin,
+}: {
+  display: Display;
+  position: "top-right" | "center" | "bottom-right";
+  width: number;
+  height: number;
+  margin?: number;
+}) {
+  margin ??= 0;
+  let x = display.bounds.x;
+  let y = display.bounds.y;
 
-  return devToolsWindow;
+  if (position === "center") {
+    x += (display.bounds.width - width) / 2;
+    y += (display.bounds.height - height) / 2;
+  } else if (position === "top-right") {
+    x += display.bounds.width - width;
+    x -= margin;
+    y += margin;
+  } else if (position === "bottom-right") {
+    x += display.bounds.width - width;
+    y += display.bounds.height - height;
+    x -= margin;
+    y -= margin;
+  }
+
+  return {
+    width,
+    height,
+    x,
+    y,
+  };
 }

@@ -1,9 +1,5 @@
 import { app, BrowserWindow, Rectangle, screen } from "electron";
-import path from "node:path";
-import url from "node:url";
 import {
-  isDevelopment,
-  isTest,
   getIconFilename,
   INDEX_FILENAME,
   INDEX_URL,
@@ -11,105 +7,46 @@ import {
   PRELOAD_FILENAME,
 } from "@src/utils";
 
-import { initElectron } from "@src/init/initElectron";
-import { installChromeExtensions } from "@lib/electron-utils";
-import { configDevToolsWindow } from "@src/utils/configDevToolsWindow";
-import * as fs from "node:fs";
+import { DevToolsWindow, getBounds } from "@src/utils/configDevToolsWindow";
 
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import stage2_initialize from "@src/initialize/stage2_initialize";
+import stage1_registry from "@src/initialize/stage1_registry";
+import stage0_check from "@src/initialize/stage0_check";
+
+import { initConsoleWindow, logger } from "@src/utils/logger";
 
 void main();
 
-/**
- *
- * - init electron app;
- * - create init window;
- *   - init system services;
- *     - create windows
- *     - ...
- *   - init other services in child_process;
- * - switch to main window;
- *
- */
 async function main() {
-  await initElectron();
-
-  // store window position before quit
-  app.on("before-quit", () => {
-    // // store window pos when before app quit
-    // const window = getMainWindow()
-    // if (!window || window.isDestroyed()) return
-    // const bounds = window.getBounds()
-    //
-    // store.set(windowStateStoreKey, {
-    //   width: bounds.width,
-    //   height: bounds.height,
-    //   x: bounds.x,
-    //   y: bounds.y,
-    // })
-  });
-
-  // destroy window before quit
-  app.on("before-quit", () => {
-    // const windows = BrowserWindow.getAllWindows()
-    // windows.forEach((window) => window.destroy())
-  });
-
-  // Quit when all windows are closed, except on macOS. There, it's common
-  // for applications and their menu bar to stay active until the user quits
-  // explicitly with Cmd + Q.
-  app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") app.quit();
-  });
+  await stage0_check();
+  await stage1_registry();
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   await app.whenReady();
 
-  // watchShortcuts
-  app.on("browser-window-created", (_, window) => {
-    // optimizer.watchWindowShortcuts(window)
-  });
+  // createLoadingWindow
 
-  // setAppUserModelId
-
-  // createMainWindow
-  const mainWindow = await createMainWindow();
-  const devLog = (...args) =>
-    mainWindow.webContents.send(`dev#console.log`, ...args);
-
-  // update proxy
-  // registry updater
+  await stage2_initialize();
 
   // handleCreateMainWindow
-  app.on("activate", () => {
+  app.on("activate", async () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length !== 0) return;
-    createMainWindow();
+    await createWindows();
   });
 
-  /**
-   * handle open-url
-   * - create or restore target window, then focus
-   * - handle open action
-   */
-  app.on("open-url", (_, url) => {
-    // if (mainWindow && !mainWindow.isDestroyed()) {
-    //   if (mainWindow.isMinimized()) mainWindow.restore()
-    //   mainWindow.focus()
-    // } else {
-    //   mainWindow = createMainWindow()
-    // }
-    // url && handleOpen(url)
-  });
+  await createWindows();
+}
 
-  // install extensions
-  if ([isDevelopment, isTest].some(Boolean)) {
-    await installChromeExtensions(["REACT_DEVELOPER_TOOLS"]);
-  }
+async function createWindows() {
+  const mainWindow = await createMainWindow();
+  const consoleWindow = await initConsoleWindow();
+  mainWindow.on("closed", () => {
+    consoleWindow.destroy();
+  });
 }
 
 async function createMainWindow() {
@@ -157,6 +94,11 @@ async function createMainWindow() {
   }
   const mainWindow: BrowserWindow = new BrowserWindow(options);
 
+  // watchShortcuts
+  app.on("browser-window-created", (_, window) => {
+    // optimizer.watchWindowShortcuts(window)
+  });
+
   if (INDEX_URL) {
     await mainWindow.loadURL(INDEX_URL);
   } else {
@@ -174,9 +116,17 @@ async function createMainWindow() {
     mainWindow.show();
   }
 
-  const devToolsWindow = configDevToolsWindow(mainWindow);
+  const devToolsWindow = new DevToolsWindow(
+    mainWindow,
+    getBounds({
+      display: targetDisplay,
+      position: "bottom-right",
+      margin: 76,
+      width: 800,
+      height: 600,
+    }),
+  );
   mainWindow.webContents.openDevTools({ mode: "detach" });
-
-  console.log(`[main] window started`);
+  logger.log(`[main] window created`);
   return mainWindow;
 }
