@@ -6,7 +6,10 @@ import { INPUT_PRELOAD, OUTPUT_PRELOAD } from "@scripts/utils/constant";
 
 void main();
 async function main() {
+  const watch = (process.env.WATCH_PRELOAD ?? "false") === "true";
+
   console.log(`[build:preload] compiling`);
+
   await build({
     entry: [path.resolve(projectDirname, INPUT_PRELOAD, "./index.ts")],
     outDir: path.resolve(projectDirname, OUTPUT_PRELOAD),
@@ -20,5 +23,7 @@ async function main() {
     sourcemap: true,
     skipNodeModulesBundle: true,
     noExternal: getTsupNoExternal(),
+    //
+    watch: watch,
   });
 }

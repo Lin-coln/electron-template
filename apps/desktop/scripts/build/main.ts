@@ -2,13 +2,19 @@ import { build } from "tsup";
 import path from "node:path";
 import { projectDirname } from "@scripts/utils";
 import { getTsupNoExternal } from "@scripts/utils/getTsupNoExternal";
-import fs from "fs";
-import { resolveAppConfig } from "@appConfig";
 import { DIST, INPUT_MAIN, OUTPUT_MAIN } from "@scripts/utils/constant";
+import { isMainEntry } from "@tools/api";
+
+if (isMainEntry(import.meta)) {
+  // ...
+}
 
 void main();
 async function main() {
+  const watch = (process.env.WATCH_MAIN ?? "false") === "true";
+
   console.log(`[build:main] compiling`);
+
   await build({
     entry: {
       index: path.resolve(projectDirname, INPUT_MAIN),
@@ -30,27 +36,7 @@ async function main() {
     skipNodeModulesBundle: true,
     noExternal: getTsupNoExternal(),
     // // watch config
-    // watch: [],
+    watch: watch,
     // ignoreWatch: [],
   });
-
-  // generate package.json
-  const appCfg = await resolveAppConfig();
-  await fs.promises.writeFile(
-    path.resolve(projectDirname, DIST, "./package.json"),
-    JSON.stringify(
-      {
-        name: appCfg.app_name,
-        author: appCfg.author,
-        version: appCfg.version,
-        private: true,
-        type: "module",
-        main: path.relative(DIST, OUTPUT_MAIN),
-        homepage: "./",
-      },
-      null,
-      2,
-    ),
-    "utf8",
-  );
 }

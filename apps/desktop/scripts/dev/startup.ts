@@ -13,11 +13,8 @@ void main().then(
 );
 
 async function main() {
-  console.log(`[build] start`);
-  await ts("clean");
-  await ts("build/main");
-  await ts("build/preload");
-  await ts("build/renderer");
   await generatePackageJson();
-  console.log(`[build] done`);
+  await ts("build/preview", {
+    INDEX_URL: `http://localhost:5173`,
+  });
 }

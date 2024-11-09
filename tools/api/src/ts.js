@@ -54,14 +54,27 @@ async function resolveTsConfig() {
 }
 
 async function runScript({ filename, tsconfig, env }) {
-  await new Promise((resolve) => {
-    child_process.execSync(`tsx --tsconfig ${tsconfig} ${filename}`, {
+  await new Promise((resolve, reject) => {
+    process.env.TS_ENTRY ??= filename;
+    const cmd = `tsx --tsconfig ${tsconfig} ${filename}`;
+    env = Object.fromEntries(
+      Object.entries(env)
+        .filter(([_, value]) => ![undefined, ""].includes(value))
+        .map(([key, value]) => [key, value.toString()]),
+    );
+    const [command, ...args] = cmd.split(" ");
+    const childProcess = child_process.spawn(command, args, {
       stdio: "inherit",
       env: {
         ...process.env,
         ...env,
       },
     });
-    resolve();
+    childProcess.on("error", (err) => {
+      reject(err);
+    });
+    childProcess.on("close", () => {
+      resolve();
+    });
   });
 }

@@ -5,10 +5,10 @@ import {
   ICON_FILENAME,
   INDEX_FILENAME,
   INDEX_URL,
+  NO_FOCUS,
   PRELOAD_FILENAME,
-} from "./constant";
-import { installChromeExtensions } from "@lib/electron-utils";
-import * as process from "node:process";
+} from "./utils";
+import { initElectron } from "@src/init";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,36 +31,21 @@ app.whenReady().then(async () => {
     if (process.platform !== "darwin") app.quit();
   });
 
-  await startup();
-});
-
-/**
- *
- * - init electron app;
- * - create init window;
- *   - init system services;
- *     - create windows
- *     - ...
- *   - init other services in child_process;
- * - switch to main window;
- *
- */
-async function startup() {
-  await startupService();
-
-  if (!app.isPackaged) {
-    await installChromeExtensions(["REACT_DEVELOPER_TOOLS"]);
-  }
-
+  /**
+   *
+   * - init electron app;
+   * - create init window;
+   *   - init system services;
+   *     - create windows
+   *     - ...
+   *   - init other services in child_process;
+   * - switch to main window;
+   *
+   */
+  await initElectron();
   const mainWindow = await startupWindow();
   // services.addWebContentsPeer(mainWindow.webContents);
-}
-
-async function startupService() {
-  const services = await import("./services").then((mod) => mod.default);
-  await services.initialize();
-  console.log(`service started`);
-}
+});
 
 async function startupWindow() {
   const displays = screen.getAllDisplays();
@@ -111,10 +96,14 @@ async function startupWindow() {
   } else {
     await mainWindow.loadFile(INDEX_FILENAME);
   }
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 
-  mainWindow.show();
+  if (NO_FOCUS) {
+    // no focus when reboot app from dev:main
+    mainWindow.showInactive();
+  } else {
+    mainWindow.show();
+  }
+
   console.log(`window started`);
   return mainWindow;
 }

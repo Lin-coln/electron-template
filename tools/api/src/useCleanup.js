@@ -1,26 +1,47 @@
 import process from "node:process";
 
-process.on("SIGINT", async () => {
-  await cleanUp();
-  process.exit(0);
-});
-process.on("SIGTERM", async () => {
-  await cleanUp();
-  process.exit(0);
-});
-process.on("uncaughtException", async (error) => {
-  console.error(error);
-  await cleanUp();
-  process.exit(1);
-});
+const map = new WeakMap();
 
-const callbacks = new Set();
-async function cleanUp() {
-  for (const callback of callbacks.values()) {
-    await callback();
+export default function useCleanup(cb, target) {
+  target ??= process;
+  if (!map.has(target)) {
+    map.set(target, new Set());
+    setupCleanup(target);
   }
+  const callbacks = map.get(target);
+  callbacks.add(cb);
 }
 
-export default function useCleanup(cb) {
-  callbacks.add(cb);
+function setupCleanup(process) {
+  process.on("SIGINT", async () => {
+    await cleanup();
+    if (process.exit) {
+      process.exit(0);
+    } else {
+      process.kill(0);
+    }
+  });
+  process.on("SIGTERM", async () => {
+    await cleanup();
+    if (process.exit) {
+      process.exit(0);
+    } else {
+      process.kill(0);
+    }
+  });
+  process.on("uncaughtException", async (error) => {
+    console.error(error);
+    await cleanup();
+    if (process.exit) {
+      process.exit(1);
+    } else {
+      process.kill(1);
+    }
+  });
+  async function cleanup() {
+    if (!map.has(process)) return;
+    for (const callback of map.get(process)) {
+      await callback();
+    }
+  }
 }

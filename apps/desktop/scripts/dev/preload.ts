@@ -12,5 +12,5 @@ void main().then(
 );
 
 async function main() {
-  await ts("build/main", { WATCH_MAIN: true });
+  await ts("build/preload", { WATCH_PRELOAD: true });
 }
