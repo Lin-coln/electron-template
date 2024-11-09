@@ -2,26 +2,58 @@ import { app, BrowserWindow, Rectangle, screen } from "electron";
 import path from "node:path";
 import url from "node:url";
 import {
-  ICON_FILENAME,
+  isDevelopment,
+  isTest,
+  getIconFilename,
   INDEX_FILENAME,
   INDEX_URL,
   NO_FOCUS,
   PRELOAD_FILENAME,
-} from "./utils";
-import { initElectron } from "@src/init";
+} from "@src/utils";
+
+import { initElectron } from "@src/init/initElectron";
+import { installChromeExtensions } from "@lib/electron-utils";
+import { configDevToolsWindow } from "@src/utils/configDevToolsWindow";
+import * as fs from "node:fs";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(async () => {
-  app.on("activate", () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length !== 0) return;
-    startupWindow();
+void main();
+
+/**
+ *
+ * - init electron app;
+ * - create init window;
+ *   - init system services;
+ *     - create windows
+ *     - ...
+ *   - init other services in child_process;
+ * - switch to main window;
+ *
+ */
+async function main() {
+  await initElectron();
+
+  // store window position before quit
+  app.on("before-quit", () => {
+    // // store window pos when before app quit
+    // const window = getMainWindow()
+    // if (!window || window.isDestroyed()) return
+    // const bounds = window.getBounds()
+    //
+    // store.set(windowStateStoreKey, {
+    //   width: bounds.width,
+    //   height: bounds.height,
+    //   x: bounds.x,
+    //   y: bounds.y,
+    // })
+  });
+
+  // destroy window before quit
+  app.on("before-quit", () => {
+    // const windows = BrowserWindow.getAllWindows()
+    // windows.forEach((window) => window.destroy())
   });
 
   // Quit when all windows are closed, except on macOS. There, it's common
@@ -31,23 +63,56 @@ app.whenReady().then(async () => {
     if (process.platform !== "darwin") app.quit();
   });
 
-  /**
-   *
-   * - init electron app;
-   * - create init window;
-   *   - init system services;
-   *     - create windows
-   *     - ...
-   *   - init other services in child_process;
-   * - switch to main window;
-   *
-   */
-  await initElectron();
-  const mainWindow = await startupWindow();
-  // services.addWebContentsPeer(mainWindow.webContents);
-});
+  // This method will be called when Electron has finished
+  // initialization and is ready to create browser windows.
+  // Some APIs can only be used after this event occurs.
+  await app.whenReady();
 
-async function startupWindow() {
+  // watchShortcuts
+  app.on("browser-window-created", (_, window) => {
+    // optimizer.watchWindowShortcuts(window)
+  });
+
+  // setAppUserModelId
+
+  // createMainWindow
+  const mainWindow = await createMainWindow();
+  const devLog = (...args) =>
+    mainWindow.webContents.send(`dev#console.log`, ...args);
+
+  // update proxy
+  // registry updater
+
+  // handleCreateMainWindow
+  app.on("activate", () => {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length !== 0) return;
+    createMainWindow();
+  });
+
+  /**
+   * handle open-url
+   * - create or restore target window, then focus
+   * - handle open action
+   */
+  app.on("open-url", (_, url) => {
+    // if (mainWindow && !mainWindow.isDestroyed()) {
+    //   if (mainWindow.isMinimized()) mainWindow.restore()
+    //   mainWindow.focus()
+    // } else {
+    //   mainWindow = createMainWindow()
+    // }
+    // url && handleOpen(url)
+  });
+
+  // install extensions
+  if ([isDevelopment, isTest].some(Boolean)) {
+    await installChromeExtensions(["REACT_DEVELOPER_TOOLS"]);
+  }
+}
+
+async function createMainWindow() {
   const displays = screen.getAllDisplays();
   const targetDisplay = displays[displays.length > 1 ? 1 : 0];
 
@@ -56,7 +121,7 @@ async function startupWindow() {
   const y = targetDisplay.bounds.y + (targetDisplay.bounds.height - height) / 2;
 
   const options: Electron.BrowserWindowConstructorOptions = {
-    icon: ICON_FILENAME,
+    icon: getIconFilename(".ico"),
     width,
     height,
     x,
@@ -109,51 +174,9 @@ async function startupWindow() {
     mainWindow.show();
   }
 
-  initDevToolsWindow(mainWindow);
+  const devToolsWindow = configDevToolsWindow(mainWindow);
   mainWindow.webContents.openDevTools({ mode: "detach" });
 
   console.log(`[main] window started`);
   return mainWindow;
-}
-
-/**
- * use custom browserWindow for devTools,
- * so that u can update its bounds and
- * use showInactive to prevent focus devToolsWindow when it opened trigger by reboot
- */
-function initDevToolsWindow(hostWindow: BrowserWindow) {
-  const hostBounds = hostWindow.getBounds();
-  const hostDisplay = screen.getDisplayNearestPoint({
-    x: hostBounds.x,
-    y: hostBounds.y,
-  });
-  // right placement of host window
-  const devBounds: Rectangle = { x: 0, y: 0, width: 800, height: 1000 };
-  devBounds.x +=
-    hostBounds.x +
-    hostBounds.width +
-    (hostDisplay.bounds.x +
-      hostDisplay.bounds.width -
-      hostBounds.x -
-      hostBounds.width -
-      devBounds.width) /
-      2;
-  devBounds.y +=
-    hostDisplay.bounds.y + (hostDisplay.bounds.height - devBounds.height) / 2;
-
-  const devToolsWindow = new BrowserWindow({
-    show: false,
-    ...devBounds,
-  });
-  hostWindow.webContents.setDevToolsWebContents(devToolsWindow.webContents);
-  hostWindow.webContents.on("devtools-opened", async () => {
-    // show win
-    if (NO_FOCUS) {
-      devToolsWindow.showInactive();
-    } else {
-      devToolsWindow.show();
-    }
-  });
-
-  return devToolsWindow;
 }

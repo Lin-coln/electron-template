@@ -24,10 +24,24 @@ interface PackageConfig {
 
 void main();
 async function main() {
-  console.log(`[pack] packing darwin application`);
+  console.log(`[pack] pack darwin application`);
   const appConfig = await resolveAppConfig();
 
-  const resourcesDirname = path.resolve(projectDirname, "resources");
+  // copy internal resources
+  console.log(`[pack] cp internal resources`);
+  await copyInternalResource();
+
+  // pack
+  console.log(`[pack] start packing...`);
+  const externalDirname = path.resolve(projectDirname, "./resources");
+  const extra_resource = await fs.promises
+    .readdir(externalDirname)
+    .then((files) =>
+      files
+        .filter((file) => file.startsWith("."))
+        .map((file) => path.resolve(externalDirname, file)),
+    );
+
   const cfg: PackageConfig = {
     ...appConfig,
     arch: "arm64",
@@ -35,7 +49,7 @@ async function main() {
     icon: path.resolve(projectDirname, "./resources/icons/icon.icns"),
     input: path.resolve(projectDirname, DIST),
     output: path.resolve(projectDirname, DIST_PACK),
-    extra_resource: [resourcesDirname],
+    extra_resource: extra_resource,
   };
 
   const options = createPackageOptions(cfg);
@@ -138,5 +152,29 @@ function createPackageOptions(cfg: PackageConfig): Options {
       // beforeCopy,
       // beforeCopyExtraResources,
     };
+  }
+}
+
+async function copyInternalResource() {
+  const sourceDirname = path.resolve(projectDirname, "./resources");
+  const targetDirname = path.resolve(projectDirname, "./dist");
+
+  const files = await fs.promises.readdir(sourceDirname);
+  for (const file of files) {
+    if (file.startsWith(".")) continue;
+
+    if (fs.existsSync(path.resolve(targetDirname, file))) {
+      throw new Error(
+        `failed to copy file, conflict name with compiled file: ${file}`,
+      );
+    }
+
+    await fs.promises.cp(
+      path.resolve(sourceDirname, file),
+      path.resolve(targetDirname, file),
+      {
+        recursive: true,
+      },
+    );
   }
 }

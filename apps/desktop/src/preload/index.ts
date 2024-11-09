@@ -1,4 +1,5 @@
 import IpcRendererEvent = Electron.IpcRendererEvent;
+import { ipcRenderer } from "electron";
 
 type Platform =
   | "aix"
@@ -59,22 +60,21 @@ interface ElectronAPI {
 
 main();
 function main() {
-  const logger = usePreloadLogger();
-  logger.log(`start`);
+  const preloadLogger = useLogger("preload", "#518d57");
+  const mainLoader = useLogger("main", "#1f64f8");
+  preloadLogger.log(`start`);
 
-  // ...
-  const electronAPI = {
-    // ...
-  };
+  ipcRenderer.on(`dev#console.log`, (ipcEvent, ...args) => {
+    mainLoader.log(...args);
+  });
 
-  logger.log(`end`);
+  preloadLogger.log(`end`);
   console.log("\n\n\n");
 }
 
-function usePreloadLogger() {
-  const color = "#518d57";
+function useLogger(scope: string, color: string) {
   const prefix = [
-    `%c` + "preload",
+    `%c` + scope,
     `border-radius: 4px; background: ${color}; color: white; padding: 2px 6px`,
   ];
 
