@@ -1,19 +1,19 @@
 import { app, BrowserWindow, Rectangle, screen } from "electron";
 import {
-  getIconFilename,
   INDEX_FILENAME,
   INDEX_URL,
   NO_FOCUS,
   PRELOAD_FILENAME,
 } from "@src/utils";
 
-import { DevToolsWindow, getBounds } from "@src/utils/configDevToolsWindow";
+import { DevToolsWindow } from "@src/utils/window";
 
 import stage2_initialize from "@src/initialize/stage2_initialize";
 import stage1_registry from "@src/initialize/stage1_registry";
 import stage0_check from "@src/initialize/stage0_check";
-
-import { initConsoleWindow, logger } from "@src/utils/logger";
+import { logger } from "@src/utils/logger";
+import { getAppWindowOptions } from "@src/utils/window";
+import { ConsoleWindow } from "@src/windows/ConsoleWindow";
 
 void main();
 
@@ -42,56 +42,22 @@ async function main() {
 }
 
 async function createWindows() {
+  const consoleWindow = await ConsoleWindow.create();
   const mainWindow = await createMainWindow();
-  const consoleWindow = await initConsoleWindow();
   mainWindow.on("closed", () => {
     consoleWindow.destroy();
   });
 }
 
 async function createMainWindow() {
-  const displays = screen.getAllDisplays();
-  const targetDisplay = displays[displays.length > 1 ? 1 : 0];
+  const options = getAppWindowOptions({
+    preload: PRELOAD_FILENAME,
+    display: 1,
+    placement: [0.3, "center"],
+    width: 1200,
+    height: 900,
+  });
 
-  const { width, height } = { width: 1200, height: 900 };
-  const x = targetDisplay.bounds.x + (targetDisplay.bounds.width - width) * 0.3;
-  const y = targetDisplay.bounds.y + (targetDisplay.bounds.height - height) / 2;
-
-  const options: Electron.BrowserWindowConstructorOptions = {
-    icon: getIconFilename(".ico"),
-    width,
-    height,
-    x,
-    y,
-    show: false,
-    autoHideMenuBar: true,
-    webPreferences: {
-      preload: PRELOAD_FILENAME,
-      additionalArguments: [], // add process.argv to preload script
-      nodeIntegration: false,
-      contextIsolation: true,
-      sandbox: false,
-      webSecurity: true,
-      // webSecurity: !isDev,
-      // devTools: isDev || isTest,
-      spellcheck: false,
-    },
-  };
-  if (process.platform === "darwin") {
-    Object.assign(options, {
-      frame: false,
-      transparency: true,
-      backgroundColor: undefined,
-      titleBarStyle: "hiddenInset",
-      vibrancy: "under-window", // blur
-      visualEffectState: "active",
-      transparent: true,
-      trafficLightPosition: {
-        x: 12,
-        y: 12,
-      },
-    } as Electron.BrowserWindowConstructorOptions);
-  }
   const mainWindow: BrowserWindow = new BrowserWindow(options);
 
   // watchShortcuts
@@ -116,17 +82,14 @@ async function createMainWindow() {
     mainWindow.show();
   }
 
-  const devToolsWindow = new DevToolsWindow(
-    mainWindow,
-    getBounds({
-      display: targetDisplay,
-      position: "bottom-right",
-      margin: 76,
-      width: 800,
-      height: 600,
-    }),
-  );
-  mainWindow.webContents.openDevTools({ mode: "detach" });
+  new DevToolsWindow(mainWindow, {
+    display: 1,
+    placement: ["right", "bottom"],
+    margin: 76,
+    width: 800,
+    height: 600,
+  }).open();
+
   logger.log(`[main] window created`);
   return mainWindow;
 }
