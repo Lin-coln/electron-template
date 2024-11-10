@@ -2,7 +2,7 @@ import { createDMG } from "electron-installer-dmg";
 import path from "path";
 import { resolveAppConfig } from "@appConfig";
 import { projectDirname } from "@scripts/utils";
-import { DIST_PACK } from "@scripts/utils/constant";
+import { config } from "@scripts/utils/config";
 
 void main();
 
@@ -13,7 +13,7 @@ async function main() {
     ...appConfig,
     platform: "darwin",
     arch: "arm64",
-    output: path.resolve(projectDirname, DIST_PACK),
+    output: path.resolve(config.base, config.dist.pack),
   };
 
   await createDMG({

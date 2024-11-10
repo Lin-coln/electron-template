@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.node.json",
   "compilerOptions": {
+    "moduleResolution": "bundler",
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "noImplicitAny": false,

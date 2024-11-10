@@ -1,12 +1,11 @@
 import { resolveAppConfig } from "@appConfig";
 import fs from "fs";
 import path from "node:path";
-import { projectDirname } from "@scripts/utils/index";
-import { DIST, OUTPUT_MAIN } from "@scripts/utils/constant";
+import { config } from "@scripts/utils/config";
 
 export async function generatePackageJson() {
   const appCfg = await resolveAppConfig();
-  const dist = path.resolve(projectDirname, DIST, "./package.json");
+  const dist = path.resolve(config.base, config.dist.build, "./package.json");
   if (!fs.existsSync(path.dirname(dist))) {
     await fs.promises.mkdir(path.dirname(dist), { recursive: true });
   }
@@ -19,7 +18,7 @@ export async function generatePackageJson() {
         version: appCfg.version,
         private: true,
         type: "module",
-        main: path.relative(DIST, path.join(OUTPUT_MAIN, "./index.js")),
+        main: path.join(config.main.output, "./index.js"),
         homepage: "./",
       },
       null,

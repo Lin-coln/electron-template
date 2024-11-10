@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.bundle.json",
+  "extends": "../tsconfig.node.json",
   "compilerOptions": {
     "baseUrl": ".",
     "declaration": true

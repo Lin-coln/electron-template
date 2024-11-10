@@ -9,6 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/apps/view/dist" />
       <excludeFolder url="file://$MODULE_DIR$/libraries/service-old/dist" />
       <excludeFolder url="file://$MODULE_DIR$/apps/desktop/dist-pack" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/electron-toolkit/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

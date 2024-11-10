@@ -1,95 +1,112 @@
-import { app, BrowserWindow, Rectangle, screen } from "electron";
+import { app, nativeTheme } from "electron";
 import {
-  INDEX_FILENAME,
-  INDEX_URL,
-  NO_FOCUS,
-  PRELOAD_FILENAME,
+  APP_PROTOCOL,
+  getIconFilename,
+  isDevelopment,
+  isTest,
 } from "@src/utils";
-
-import { DevToolsWindow } from "@src/utils/window";
-
-import stage2_initialize from "@src/initialize/stage2_initialize";
-import stage1_registry from "@src/initialize/stage1_registry";
-import stage0_check from "@src/initialize/stage0_check";
 import { logger } from "@src/utils/logger";
-import { getAppWindowOptions } from "@src/utils/window";
-import { ConsoleWindow } from "@src/windows/ConsoleWindow";
+import { installChromeExtensions } from "@lib/electron-utils";
+import { initWindows } from "@src/windows";
 
 void main();
 
 async function main() {
-  await stage0_check();
-  await stage1_registry();
+  let result: "quit" | "continue";
+
+  result = await quitIfSecondInstance();
+  async function quitIfSecondInstance() {
+    const gotTheLock = app.requestSingleInstanceLock();
+    if (!gotTheLock) {
+      logger.log(`[init::stage0] restrict single instance, quit...`);
+      app.quit();
+      return "quit";
+    } else {
+      return "continue";
+    }
+  }
+
+  if (result === "quit") {
+    app.quit();
+    return;
+  }
+
+  // Quit when all windows are closed, except on macOS. There, it's common
+  // for applications and their menu bar to stay active until the user quits
+  // explicitly with Cmd + Q.
+  app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") app.quit();
+  });
+
+  // set dock icon for MacOS & linux
+  if (app.dock) {
+    app.dock.setIcon(getIconFilename(".png"));
+  }
+
+  // set app protocol client
+  app.setAsDefaultProtocolClient(APP_PROTOCOL, process.execPath, [
+    ...(app.isPackaged ? [] : [process.argv[1]]),
+    "--",
+  ]);
+
+  // theme
+  nativeTheme.themeSource = "system";
+
+  // registerMenuAndContextMenu()
+  // registerPushNotifications()
+  // enable cache cleanup task
+
+  /**
+   * handle second instance:
+   * - redirect to open-url
+   */
+  app.on("second-instance", (_, commandLine) => {
+    logger.log("[commandLine]", commandLine);
+    // if (mainWindow) {
+    //   if (mainWindow.isMinimized()) mainWindow.restore()
+    //   mainWindow.focus()
+    // }
+    //
+    // const url = commandLine.pop()
+    // if (url) {
+    //   handleOpen(url)
+    // }
+  });
+
+  // setAppUserModelId
+  // update proxy
+  // registry updater
+
+  /**
+   * handle open-url
+   * - create or restore target window, then focus
+   * - handle open action
+   */
+  app.on("open-url", (_, url) => {
+    // if (mainWindow && !mainWindow.isDestroyed()) {
+    //   if (mainWindow.isMinimized()) mainWindow.restore()
+    //   mainWindow.focus()
+    // } else {
+    //   mainWindow = createMainWindow()
+    // }
+    // url && handleOpen(url)
+  });
+
+  // init services
+  const services = await import("./services").then((mod) => mod.default);
+  await services.initialize();
+  logger.log(`service started`);
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   await app.whenReady();
 
-  // createLoadingWindow
-
-  await stage2_initialize();
-
-  // handleCreateMainWindow
-  app.on("activate", async () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length !== 0) return;
-    await createWindows();
-  });
-
-  await createWindows();
-}
-
-async function createWindows() {
-  const consoleWindow = await ConsoleWindow.create();
-  const mainWindow = await createMainWindow();
-  mainWindow.on("closed", () => {
-    consoleWindow.destroy();
-  });
-}
-
-async function createMainWindow() {
-  const options = getAppWindowOptions({
-    preload: PRELOAD_FILENAME,
-    display: 1,
-    placement: [0.3, "center"],
-    width: 1200,
-    height: 900,
-  });
-
-  const mainWindow: BrowserWindow = new BrowserWindow(options);
-
-  // watchShortcuts
-  app.on("browser-window-created", (_, window) => {
-    // optimizer.watchWindowShortcuts(window)
-  });
-
-  if (INDEX_URL) {
-    await mainWindow.loadURL(INDEX_URL);
-  } else {
-    await mainWindow.loadFile(INDEX_FILENAME);
+  // install extensions
+  if ([isDevelopment, isTest].some(Boolean)) {
+    await installChromeExtensions(["REACT_DEVELOPER_TOOLS"]);
   }
 
-  if (NO_FOCUS) {
-    const windowShowPromise = new Promise<void>((resolve) =>
-      mainWindow.once("show", () => resolve()),
-    );
-    // no focus when reboot app from dev:main
-    mainWindow.showInactive();
-    await windowShowPromise;
-  } else {
-    mainWindow.show();
-  }
-
-  new DevToolsWindow(mainWindow, {
-    display: 1,
-    placement: ["right", "bottom"],
-    margin: 76,
-    width: 800,
-    height: 600,
-  }).open();
-
-  logger.log(`[main] window created`);
-  return mainWindow;
+  // init windows here
+  await initWindows();
 }

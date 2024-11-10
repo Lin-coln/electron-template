@@ -2,11 +2,11 @@ import path from "node:path";
 import { projectDirname } from "@scripts/utils";
 import child_process, { ChildProcess } from "node:child_process";
 import { build } from "tsup";
-import { DIST, INPUT_MAIN, OUTPUT_MAIN } from "@scripts/utils/constant";
 import { getTsupNoExternal } from "@scripts/utils/getTsupNoExternal";
 import { ts, useCleanup } from "@tools/api";
 import { createRequire } from "node:module";
 import { generatePackageJson } from "@scripts/utils/generatePackageJson";
+import { config } from "@scripts/utils/config";
 
 void main();
 async function main() {
@@ -20,12 +20,12 @@ async function main() {
 async function devMain() {
   await build({
     entry: {
-      index: path.resolve(projectDirname, INPUT_MAIN),
+      index: path.resolve(config.base, config.main.input),
     },
-    outDir: path.resolve(projectDirname, OUTPUT_MAIN),
+    outDir: path.resolve(config.base, config.dist.build, config.main.output),
     tsconfig: path.resolve(
-      projectDirname,
-      path.dirname(INPUT_MAIN),
+      config.base,
+      path.dirname(config.main.input),
       "./tsconfig.json",
     ),
     dts: false,
@@ -134,7 +134,7 @@ function createElectronProcessManager() {
     const electron = createRequire(import.meta.url)("electron");
     const appProcess = child_process.spawn(electron, [".", ...argsList], {
       stdio: "inherit",
-      cwd: path.resolve(projectDirname, DIST),
+      cwd: path.resolve(config.base, config.dist.build),
     });
 
     useCleanup(() => appProcess.kill(0));

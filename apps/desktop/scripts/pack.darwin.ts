@@ -3,7 +3,7 @@ import path from "node:path";
 import { projectDirname } from "@scripts/utils";
 import { resolveAppConfig } from "@appConfig";
 import fs from "fs";
-import { DIST, DIST_PACK } from "@scripts/utils/constant";
+import { config } from "@scripts/utils/config";
 
 interface PackageConfig {
   app_name: string;
@@ -47,8 +47,8 @@ async function main() {
     arch: "arm64",
     platform: "darwin",
     icon: path.resolve(projectDirname, "./resources/icons/icon.icns"),
-    input: path.resolve(projectDirname, DIST),
-    output: path.resolve(projectDirname, DIST_PACK),
+    input: path.resolve(config.base, config.dist.build),
+    output: path.resolve(config.base, config.dist.pack),
     extra_resource: extra_resource,
   };
 

@@ -4,13 +4,14 @@ import { getIconFilename, PRELOAD_FILENAME } from "@src/utils";
 export function getAppWindowOptions(
   opts: BoundsOptions & {
     preload?: string;
+    icon?: string;
   },
 ) {
-  const { preload, ...boundsOpts } = opts;
+  const { preload, icon, ...boundsOpts } = opts;
 
   const options: Electron.BrowserWindowConstructorOptions = {
     ...getBounds(boundsOpts),
-    icon: getIconFilename(".ico"),
+    icon,
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
@@ -47,16 +48,30 @@ export function getAppWindowOptions(
 export function getDevWindowOptions(
   opts: BoundsOptions & {
     preload?: string;
+    closable?: boolean;
+    icon?: string;
   },
 ) {
-  const { preload, ...boundsOpts } = opts;
+  const {
+    // bounds
+    width,
+    height,
+    margin,
+    placement,
+    display,
+    // webPreferences
+    preload,
+    ...windowOptions
+  } = opts;
+  const boundsOpts = { width, height, margin, placement, display };
+  const webPreferences = { preload };
 
   const options = {
     ...getBounds(boundsOpts),
-    icon: getIconFilename(".ico"),
+    ...windowOptions,
     show: false,
     webPreferences: {
-      preload,
+      ...webPreferences,
     },
   } as Electron.BrowserWindowConstructorOptions;
 

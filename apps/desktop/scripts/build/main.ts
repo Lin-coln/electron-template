@@ -1,9 +1,8 @@
 import { build } from "tsup";
 import path from "node:path";
-import { projectDirname } from "@scripts/utils";
 import { getTsupNoExternal } from "@scripts/utils/getTsupNoExternal";
-import { DIST, INPUT_MAIN, OUTPUT_MAIN } from "@scripts/utils/constant";
 import { isMainEntry } from "@tools/api";
+import { config } from "@scripts/utils/config";
 
 if (isMainEntry(import.meta)) {
   // ...
@@ -17,12 +16,12 @@ async function main() {
 
   await build({
     entry: {
-      index: path.resolve(projectDirname, INPUT_MAIN),
+      index: path.resolve(config.base, config.main.input),
     },
-    outDir: path.resolve(projectDirname, OUTPUT_MAIN),
+    outDir: path.resolve(config.base, config.dist.build, config.main.output),
     tsconfig: path.resolve(
-      projectDirname,
-      path.dirname(INPUT_MAIN),
+      config.base,
+      path.dirname(config.main.input),
       "./tsconfig.json",
     ),
     dts: false,

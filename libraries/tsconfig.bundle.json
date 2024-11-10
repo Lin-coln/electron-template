@@ -7,7 +7,7 @@
     "jsx": "preserve",
     "esModuleInterop": true,
     "types": ["node"],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,

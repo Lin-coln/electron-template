@@ -1,12 +1,16 @@
 import * as child_process from "node:child_process";
 import { projectDirname } from "@scripts/utils";
 import path from "node:path";
-import { OUTPUT_RENDERER } from "@scripts/utils/constant";
+import { config } from "@scripts/utils/config";
 
 void main();
 
 async function main() {
-  const dist = path.resolve(projectDirname, OUTPUT_RENDERER);
+  const dist = path.resolve(
+    config.base,
+    config.dist.build,
+    config.renderer.main.output,
+  );
   const cwd = path.resolve(projectDirname, "../view");
   const env = {
     VITE_CONFIG_BASE: "./",

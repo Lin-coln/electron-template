@@ -1,8 +1,7 @@
 import { build } from "tsup";
 import path from "node:path";
-import { projectDirname } from "@scripts/utils";
 import { getTsupNoExternal } from "@scripts/utils/getTsupNoExternal";
-import { INPUT_PRELOAD, OUTPUT_PRELOAD } from "@scripts/utils/constant";
+import { config } from "@scripts/utils/config";
 
 void main();
 async function main() {
@@ -11,9 +10,17 @@ async function main() {
   console.log(`[build:preload] compiling`);
 
   await build({
-    entry: [path.resolve(projectDirname, INPUT_PRELOAD, "./index.ts")],
-    outDir: path.resolve(projectDirname, OUTPUT_PRELOAD),
-    tsconfig: path.resolve(projectDirname, INPUT_PRELOAD, "./tsconfig.json"),
+    entry: [path.resolve(config.base, config.preload.main.input)],
+    outDir: path.resolve(
+      config.base,
+      config.dist.build,
+      config.preload.main.output,
+    ),
+    tsconfig: path.resolve(
+      config.base,
+      path.dirname(config.preload.main.input),
+      "./tsconfig.json",
+    ),
     dts: false,
     format: ["cjs"],
     target: "es2023",

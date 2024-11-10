@@ -1,5 +1,5 @@
 import { BrowserWindow } from "electron";
-import { BoundsOptions, getDevWindowOptions } from "@src/utils/window";
+import { getDevWindowOptions } from "@src/utils/window";
 
 /**
  * use custom browserWindow for devTools,
@@ -8,8 +8,13 @@ import { BoundsOptions, getDevWindowOptions } from "@src/utils/window";
  */
 export class DevToolsWindow extends BrowserWindow {
   hostWindow: BrowserWindow;
-  constructor(hostWindow: BrowserWindow, opts: BoundsOptions) {
-    super(getDevWindowOptions(opts));
+  constructor(
+    hostWindow: BrowserWindow,
+    opts: Parameters<typeof getDevWindowOptions>[0],
+  ) {
+    super({
+      ...getDevWindowOptions(opts),
+    });
     this.hostWindow = hostWindow;
     this.hostWindow.on("closed", () => {
       if (!this.isDestroyed()) this.destroy();
@@ -21,6 +26,8 @@ export class DevToolsWindow extends BrowserWindow {
   }
 
   open() {
-    this.hostWindow.webContents.openDevTools({ mode: "detach" });
+    this.hostWindow.webContents.openDevTools({
+      mode: "detach",
+    });
   }
 }
