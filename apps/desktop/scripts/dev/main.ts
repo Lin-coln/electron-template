@@ -2,43 +2,28 @@ import path from "node:path";
 import { projectDirname } from "@scripts/utils";
 import child_process, { ChildProcess } from "node:child_process";
 import { build } from "tsup";
-import { getTsupNoExternal } from "@scripts/utils/getTsupNoExternal";
 import { ts, useCleanup } from "@tools/api";
 import { createRequire } from "node:module";
-import { generatePackageJson } from "@scripts/utils/generatePackageJson";
-import { config } from "@scripts/utils/config";
+import {
+  createMainTsupOptions,
+  generatePackageJson,
+  getBuildDirname,
+} from "@scripts/utils/toolkit";
+import { config as cfg } from "@scripts/utils/toolkit/config";
 
 void main();
 async function main() {
   await ts("clean");
-  await generatePackageJson();
+  await generatePackageJson(cfg);
   void ts("build/preload", { WATCH_PRELOAD: true });
   // const renderer = await devRenderer();
   await devMain();
 }
 
 async function devMain() {
+  const opts = createMainTsupOptions(cfg);
   await build({
-    entry: {
-      index: path.resolve(config.base, config.main.input),
-    },
-    outDir: path.resolve(config.base, config.dist.build, config.main.output),
-    tsconfig: path.resolve(
-      config.base,
-      path.dirname(config.main.input),
-      "./tsconfig.json",
-    ),
-    dts: false,
-    format: ["esm"],
-    target: "esnext",
-    minify: false,
-    clean: true,
-    // splitting: false,
-    splitting: true,
-    sourcemap: true,
-    skipNodeModulesBundle: true,
-    noExternal: getTsupNoExternal(),
-
+    ...opts,
     // // watch config
     watch: true,
     // ignoreWatch: [],
@@ -134,7 +119,7 @@ function createElectronProcessManager() {
     const electron = createRequire(import.meta.url)("electron");
     const appProcess = child_process.spawn(electron, [".", ...argsList], {
       stdio: "inherit",
-      cwd: path.resolve(config.base, config.dist.build),
+      cwd: getBuildDirname(cfg),
     });
 
     useCleanup(() => appProcess.kill(0));

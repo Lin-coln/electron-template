@@ -3,7 +3,8 @@ import path from "node:path";
 import { projectDirname } from "@scripts/utils";
 import { resolveAppConfig } from "@appConfig";
 import fs from "fs";
-import { config } from "@scripts/utils/config";
+import { config } from "@scripts/utils/toolkit/config";
+import { getBuildDirname, getPackDirname } from "@scripts/utils/toolkit";
 
 interface PackageConfig {
   app_name: string;
@@ -47,8 +48,8 @@ async function main() {
     arch: "arm64",
     platform: "darwin",
     icon: path.resolve(projectDirname, "./resources/icons/icon.icns"),
-    input: path.resolve(config.base, config.dist.build),
-    output: path.resolve(config.base, config.dist.pack),
+    input: getBuildDirname(config),
+    output: getPackDirname(config),
     extra_resource: extra_resource,
   };
 

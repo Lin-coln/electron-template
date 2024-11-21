@@ -2,7 +2,8 @@ import { createDMG } from "electron-installer-dmg";
 import path from "path";
 import { resolveAppConfig } from "@appConfig";
 import { projectDirname } from "@scripts/utils";
-import { config } from "@scripts/utils/config";
+import { config } from "@scripts/utils/toolkit/config";
+import { getPackDirname } from "@scripts/utils/toolkit";
 
 void main();
 
@@ -13,7 +14,7 @@ async function main() {
     ...appConfig,
     platform: "darwin",
     arch: "arm64",
-    output: path.resolve(config.base, config.dist.pack),
+    output: getPackDirname(config),
   };
 
   await createDMG({

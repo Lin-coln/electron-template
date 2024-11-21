@@ -1,8 +1,8 @@
 import child_process from "node:child_process";
-import path from "node:path";
 import process from "node:process";
 import { createRequire } from "node:module";
-import { config } from "@scripts/utils/config";
+import { config } from "@scripts/utils/toolkit/config";
+import { getBuildDirname } from "@scripts/utils/toolkit";
 
 void main();
 async function main() {
@@ -18,7 +18,7 @@ async function main() {
   const electron = createRequire(import.meta.url)("electron");
   child_process.execSync(`${electron} . ${args_str}`, {
     stdio: "inherit",
-    cwd: path.resolve(config.base, config.dist.build),
+    cwd: getBuildDirname(config),
     env: {
       ...process.env,
       ...env,
