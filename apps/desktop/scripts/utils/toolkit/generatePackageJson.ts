@@ -1,4 +1,4 @@
-import { Config } from "@scripts/utils/toolkit/interface";
+import { Config } from "./interface";
 import path from "node:path";
 import fs from "fs";
 

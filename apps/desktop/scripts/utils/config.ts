@@ -1,5 +1,5 @@
-import { Config } from "./interface";
-import { projectDirname } from "@scripts/utils";
+import { Config } from "./toolkit/interface";
+import { projectDirname } from "@scripts/utils/index";
 
 export const config: Config = {
   base: projectDirname,
@@ -11,6 +11,11 @@ export const config: Config = {
     name: "foobar",
     author: "lincoln",
     version: "0.0.1",
+    product_name: "Foobar",
+    description: "my description",
+    copyright: "my copyright",
+    // darwin icon
+    icon: "./resources/icons/icon.icns",
   },
 
   // assets
@@ -26,14 +31,16 @@ export const config: Config = {
       input: "./src/preload/index.ts",
     },
     {
-      type: "resource",
-      filename: "@app/resources/*",
-      source: `./src/resources/*`,
+      type: "asar",
+      dirname: "@app/.",
+      source: `./resources`,
+      filter: (file) => !file.startsWith("."),
     },
     {
-      type: "external",
-      filename: "@ext/*",
-      source: "./src/resources/.*",
+      type: "extra",
+      dirname: "@ext/.",
+      source: "./resources",
+      filter: (file) => file.startsWith("."),
     },
   ],
 

@@ -1,7 +1,7 @@
 import child_process from "node:child_process";
 import process from "node:process";
 import { createRequire } from "node:module";
-import { config } from "@scripts/utils/toolkit/config";
+import { config } from "@scripts/utils/config";
 import { getBuildDirname } from "@scripts/utils/toolkit";
 
 void main();

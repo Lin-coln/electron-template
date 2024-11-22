@@ -1,6 +1,7 @@
 import { Options } from "tsup";
 import path from "node:path";
 import { Config, RelativePath } from "./interface";
+import { getMainDirname } from "@scripts/utils/toolkit/utils";
 
 export function createMainTsupOptions(cfg: Config): Options {
   const assets = cfg.assets.filter((asset) => asset.type === "main");
@@ -15,7 +16,7 @@ export function createMainTsupOptions(cfg: Config): Options {
         return [key, value];
       }),
     ),
-    outDir: path.resolve(cfg.base, cfg.dist_build, "./main"),
+    outDir: getMainDirname(cfg),
     tsconfig: path.resolve(cfg.base, opts.tsconfig),
     dts: false,
     format: ["esm"],

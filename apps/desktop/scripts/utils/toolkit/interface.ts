@@ -13,14 +13,27 @@ export type Asset =
       input: RelativePath;
     }
   | {
-      type: "resource";
-      filename: `@app/resources/${string}`;
+      type: "asar";
+      filename: `@app/${string}`;
       source: RelativePath;
     }
   | {
-      type: "external";
+      type: "extra";
       filename: `@ext/${string}`;
       source: RelativePath;
+    }
+  // dynamic
+  | {
+      type: "asar";
+      dirname: `@app/${string}`;
+      source: RelativePath;
+      filter: (file: string) => boolean;
+    }
+  | {
+      type: "extra";
+      dirname: `@ext/${string}`;
+      source: RelativePath;
+      filter: (file: string) => boolean;
     };
 
 export interface Config {
@@ -31,8 +44,13 @@ export interface Config {
     name: string;
     author: string;
     version: string;
-    // description:string;
-    // copyright:string;
+    product_name: string;
+    description: string;
+    copyright: string;
+
+    // pack
+    icon: RelativePath; // .icns
+    // protocols
   };
   assets: Asset[];
   options: {

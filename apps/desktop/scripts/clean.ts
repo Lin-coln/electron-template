@@ -1,5 +1,5 @@
 import fs from "fs";
-import { config } from "@scripts/utils/toolkit/config";
+import { config } from "@scripts/utils/config";
 import { getBuildDirname, getPackDirname } from "@scripts/utils/toolkit";
 
 void clean();

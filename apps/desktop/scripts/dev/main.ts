@@ -9,7 +9,7 @@ import {
   generatePackageJson,
   getBuildDirname,
 } from "@scripts/utils/toolkit";
-import { config as cfg } from "@scripts/utils/toolkit/config";
+import { config as cfg } from "@scripts/utils/config";
 
 void main();
 async function main() {

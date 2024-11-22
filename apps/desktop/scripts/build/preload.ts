@@ -1,5 +1,5 @@
 import { build } from "tsup";
-import { config } from "@scripts/utils/toolkit/config";
+import { config } from "@scripts/utils/config";
 import { createPreloadTsupOptions } from "@scripts/utils/toolkit";
 
 void main();

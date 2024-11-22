@@ -1,6 +1,6 @@
 import { build } from "tsup";
 import { isMainEntry } from "@tools/api";
-import { config } from "@scripts/utils/toolkit/config";
+import { config } from "@scripts/utils/config";
 import { createMainTsupOptions } from "@scripts/utils/toolkit";
 
 if (isMainEntry(import.meta)) {

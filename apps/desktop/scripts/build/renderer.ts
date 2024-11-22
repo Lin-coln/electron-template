@@ -1,7 +1,7 @@
 import * as child_process from "node:child_process";
 import { projectDirname } from "@scripts/utils";
 import path from "node:path";
-import { config } from "@scripts/utils/toolkit/config";
+import { config } from "@scripts/utils/config";
 import { getRendererDirname } from "@scripts/utils/toolkit";
 
 void main();

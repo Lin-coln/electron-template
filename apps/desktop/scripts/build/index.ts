@@ -1,7 +1,7 @@
 import process from "node:process";
 import { ts } from "@tools/api";
 import { generatePackageJson } from "@scripts/utils/toolkit";
-import { config } from "@scripts/utils/toolkit/config";
+import { config } from "@scripts/utils/config";
 
 void main().then(
   () => {
