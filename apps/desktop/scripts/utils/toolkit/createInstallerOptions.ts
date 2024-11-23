@@ -1,15 +1,15 @@
 import { ElectronInstallerDMGOptions } from "electron-installer-dmg";
-import path from "path";
 import { Config } from "./interface";
-import { getPackDirname } from "./utils";
+import { Context } from "./Context";
 
 export async function createDarwinInstallerOptions(
   cfg: Config,
 ): Promise<ElectronInstallerDMGOptions> {
+  const ctx = new Context(cfg);
+
   const platform = "darwin";
   const arch = "arm64";
 
-  const packDir = getPackDirname(cfg);
   const unpackFolder = `${cfg.app.name}-${platform}-${arch}`;
 
   return {
@@ -17,10 +17,10 @@ export async function createDarwinInstallerOptions(
     title: cfg.app.product_name,
     overwrite: true,
     // debug: true,
-    appPath: path.resolve(packDir, unpackFolder, `${cfg.app.name}.app`),
-    out: packDir,
+    appPath: ctx.resolvePackFilename(unpackFolder, `${cfg.app.name}.app`),
+    out: ctx.resolvePackFilename(),
     // background: '', // dmg window background image filename
-    icon: path.resolve(cfg.base, cfg.app.icon),
+    icon: ctx.resolveFilename(cfg.app.icon),
     iconSize: 80,
     // contents: [
     //

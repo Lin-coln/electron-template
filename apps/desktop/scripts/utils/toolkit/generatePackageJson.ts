@@ -1,10 +1,13 @@
 import { Config } from "./interface";
 import path from "node:path";
 import fs from "fs";
+import { Context } from "./Context";
 
 export async function generatePackageJson(cfg: Config) {
+  const ctx = new Context(cfg);
+
   const app = cfg.app;
-  const dist = path.resolve(cfg.base, cfg.dist_build, "./package.json");
+  const dist = ctx.resolveBuildFilename("./package.json");
 
   const entryAsset = cfg.assets
     .filter((asset) => asset.type === "main")
@@ -13,9 +16,7 @@ export async function generatePackageJson(cfg: Config) {
     throw new Error(`entry not found`);
   }
 
-  const entryFilename = path.resolve(
-    cfg.base,
-    cfg.dist_build,
+  const entryFilename = ctx.resolveBuildFilename(
     entryAsset.filename.replace("@app/main/", "./main/"),
   );
 

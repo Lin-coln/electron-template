@@ -1,18 +1,9 @@
-import fs from "fs";
 import { config } from "@scripts/utils/config";
-import { getBuildDirname, getPackDirname } from "@scripts/utils/toolkit";
+import { clean } from "@scripts/utils/toolkit";
 
-void clean();
+void main();
 
-async function clean() {
+async function main() {
   console.log(`[clean] cleaning...`);
-  const targets = [getBuildDirname(config), getPackDirname(config)];
-  await Promise.all(
-    targets.map(async (dirname) => {
-      if (!fs.existsSync(dirname)) return;
-      await fs.promises.rm(dirname, {
-        recursive: true,
-      });
-    }),
-  );
+  await clean(config);
 }

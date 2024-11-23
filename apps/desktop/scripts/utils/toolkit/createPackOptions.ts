@@ -152,14 +152,14 @@ async function resolveExtraResources(cfg: Config) {
     // todo filename extra
     .filter((asset) => "dirname" in asset);
 
-  const filenames: RelativePath[] = [];
+  const filenames: string[] = [];
   for (const asset of assets) {
     const dirname = asset.source;
     const files = await fs.promises.readdir(path.resolve(cfg.base, dirname));
     filenames.push(
       ...files
         .filter((file) => asset.filter(file))
-        .map((file) => path.join(dirname, file) as RelativePath),
+        .map((file) => path.join(dirname, file)),
     );
   }
 

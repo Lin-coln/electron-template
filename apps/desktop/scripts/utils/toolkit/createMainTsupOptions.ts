@@ -1,9 +1,11 @@
 import { Options } from "tsup";
 import path from "node:path";
 import { Config, RelativePath } from "./interface";
-import { getMainDirname } from "@scripts/utils/toolkit/utils";
+import { Context } from "@scripts/utils/toolkit/Context";
 
 export function createMainTsupOptions(cfg: Config): Options {
+  const ctx = new Context(cfg);
+
   const assets = cfg.assets.filter((asset) => asset.type === "main");
   const opts = cfg.options.main;
   return {
@@ -12,12 +14,12 @@ export function createMainTsupOptions(cfg: Config): Options {
         const relativePath: RelativePath = `./${asset.filename.replace("@app/main/", "")}`;
         const ext = path.extname(relativePath);
         const key = relativePath.slice(2, relativePath.length - ext.length);
-        const value = path.resolve(cfg.base, asset.input);
+        const value = ctx.resolveFilename(asset.input);
         return [key, value];
       }),
     ),
-    outDir: getMainDirname(cfg),
-    tsconfig: path.resolve(cfg.base, opts.tsconfig),
+    outDir: ctx.resolveMainFilename(),
+    tsconfig: ctx.resolveFilename(opts.tsconfig),
     dts: false,
     format: ["esm"],
     target: "esnext",
