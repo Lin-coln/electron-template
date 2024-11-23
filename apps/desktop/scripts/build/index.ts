@@ -1,6 +1,10 @@
 import process from "node:process";
 import { ts } from "@tools/api";
 import { context } from "@scripts/utils/config";
+import { build } from "tsup";
+import path from "node:path";
+import { projectDirname } from "@scripts/utils";
+import child_process from "node:child_process";
 
 void main().then(
   () => {
@@ -15,9 +19,30 @@ void main().then(
 async function main() {
   console.log(`[build] start`);
   await context.cleanup();
-  await ts("build/main");
-  await ts("build/preload");
-  await ts("build/renderer");
+
+  console.log(`[build:main] compiling`);
+  await build(context.createMainTsupOptions());
+
+  console.log(`[build:preload] compiling`);
+  await build(context.createPreloadTsupOptions());
+
+  await buildRenderer();
   await context.generatePackageJson();
   console.log(`[build] done`);
+}
+
+async function buildRenderer() {
+  const cwd = path.resolve(projectDirname, "../view");
+  const env = {
+    VITE_CONFIG_BASE: "./",
+    VITE_CONFIG_DIST: context.resolveBuildFilename("./renderer"),
+  };
+  child_process.execSync(`pnpm run build --emptyOutDir`, {
+    stdio: "inherit",
+    cwd: cwd,
+    env: {
+      ...process.env,
+      ...env,
+    },
+  });
 }

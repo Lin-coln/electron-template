@@ -7,7 +7,8 @@ void main();
 async function main() {
   await context.cleanup();
   await context.generatePackageJson();
-  void ts("build/preload", { WATCH_PRELOAD: true });
+  void build({ ...context.createPreloadTsupOptions(), watch: true });
+
   // const renderer = await devRenderer();
   await devMain();
 }

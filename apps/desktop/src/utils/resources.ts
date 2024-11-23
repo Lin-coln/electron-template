@@ -27,17 +27,17 @@ const EXTERNAL_RESOURCES_PATH = isPackaged
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-type WithRelativePrefix = `./${string}`;
-type NoDotPrefixString<P extends WithRelativePrefix> = P extends `./.${string}`
+type RelativePath = `./${string}`;
+type NoDotPrefixString<P extends RelativePath> = P extends `./.${string}`
   ? never
   : P;
-type DotPrefixString<P extends WithRelativePrefix> = P extends `./.${string}`
+type DotPrefixString<P extends RelativePath> = P extends `./.${string}`
   ? P
   : never;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const getInternalFilename = <T extends WithRelativePrefix>(
+export const getInternalFilename = <T extends RelativePath>(
   field: NoDotPrefixString<T>,
   ...args: string[]
 ) => {
@@ -54,7 +54,7 @@ export const getInternalFilename = <T extends WithRelativePrefix>(
   }
 };
 
-export const getExternalFilename = <T extends WithRelativePrefix>(
+export const getExternalFilename = <T extends RelativePath>(
   field: DotPrefixString<T>,
   ...args: string[]
 ) => path.resolve(EXTERNAL_RESOURCES_PATH, field, ...args);
