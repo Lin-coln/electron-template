@@ -1,10 +1,9 @@
 import process from "node:process";
-import { config } from "@scripts/utils/config";
-import { startupElectron } from "@scripts/utils/toolkit";
+import { context } from "@scripts/utils/config";
 
 void main();
 async function main() {
-  await startupElectron(config, {
+  await context.spawnElectronProcess({
     INDEX_URL: process.env.INDEX_URL ?? undefined,
   });
 }

@@ -1,8 +1,8 @@
 import { Options } from "electron-packager";
-import { Config, RelativePath } from "./interface";
-import { getBuildDirname, getPackDirname } from "./utils";
+import { Config } from "../interface";
 import path from "path";
 import fs from "fs";
+import { Context } from "../Context";
 
 interface PackageConfig {
   app_name: string;
@@ -21,7 +21,8 @@ interface PackageConfig {
   output: string;
 }
 
-export async function createPackOptions(cfg: Config): Promise<Options> {
+export async function createPackOptions(this: Context): Promise<Options> {
+  const cfg = this.config;
   const extra_resources = await resolveExtraResources(cfg);
 
   const packOptions = createPackageOptions({
@@ -35,8 +36,8 @@ export async function createPackOptions(cfg: Config): Promise<Options> {
 
     // others
     icon: cfg.app.icon,
-    input: getBuildDirname(cfg),
-    output: getPackDirname(cfg),
+    input: this.resolveBuildFilename(),
+    output: this.resolvePackFilename(),
     extra_resource: extra_resources,
 
     // todo

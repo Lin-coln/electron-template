@@ -1,27 +1,19 @@
-import path from "node:path";
-import { projectDirname } from "@scripts/utils";
-import child_process, { ChildProcess } from "node:child_process";
+import { ChildProcess } from "node:child_process";
 import { build } from "tsup";
 import { ts, useCleanup } from "@tools/api";
-import { createRequire } from "node:module";
-import {
-  createMainTsupOptions,
-  generatePackageJson,
-  getBuildDirname,
-} from "@scripts/utils/toolkit";
-import { config as cfg } from "@scripts/utils/config";
+import { context } from "@scripts/utils/config";
 
 void main();
 async function main() {
-  await ts("clean");
-  await generatePackageJson(cfg);
+  await context.cleanup();
+  await context.generatePackageJson();
   void ts("build/preload", { WATCH_PRELOAD: true });
   // const renderer = await devRenderer();
   await devMain();
 }
 
 async function devMain() {
-  const opts = createMainTsupOptions(cfg);
+  const opts = context.createMainTsupOptions();
   await build({
     ...opts,
     // // watch config
@@ -97,33 +89,17 @@ function createElectronProcessManager() {
     }
 
     console.log(`[electron] reboot app...`);
-    appProcess = await spawnAppProcess({
+    appProcess = await context.spawnElectronProcess({
       index_url: `http://localhost:5173`,
       no_focus: true,
     });
+    useCleanup(() => appProcess.kill(0));
     appProcess.on("exit", () => {
       if (isReboot) return;
       console.log(`[electron] exit app`);
       process.exit(0);
     });
     isReboot = false;
-  }
-
-  async function spawnAppProcess(
-    args: Record<string, string | number | boolean | undefined>,
-  ) {
-    const argsList = Object.entries(args)
-      .filter((entry) => entry[1] !== undefined)
-      .map(([key, value]) => `--${key}=${value}`);
-
-    const electron = createRequire(import.meta.url)("electron");
-    const appProcess = child_process.spawn(electron, [".", ...argsList], {
-      stdio: "inherit",
-      cwd: getBuildDirname(cfg),
-    });
-
-    useCleanup(() => appProcess.kill(0));
-    return appProcess;
   }
 }
 
@@ -140,17 +116,4 @@ function debounce<Fn extends (...args: any[]) => void>(
     }, time);
   };
   return res as any;
-}
-
-async function devRenderer() {
-  const cwd = path.resolve(projectDirname, "../view");
-  const cmd = `pnpm run dev`;
-  const [command, ...args] = cmd.split(" ");
-  const rendererProcess = child_process.spawn(command, args, {
-    // stdio: "inherit",
-    cwd: cwd,
-  });
-  rendererProcess.on("exit", () => process.exit());
-  useCleanup(() => rendererProcess.killed || rendererProcess.kill(0));
-  return rendererProcess;
 }

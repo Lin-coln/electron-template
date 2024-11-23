@@ -17,6 +17,11 @@
   "scripts": {
     "build": "tsup"
   },
+  "peerDependencies": {
+    "electron": "^33.0.2",
+    "electron-installer-dmg": "^5.0.1",
+    "electron-packager": "^17.1.2"
+  },
   "devDependencies": {
     "@types/node": "^22.7.9",
     "tsup": "^8.3.5",

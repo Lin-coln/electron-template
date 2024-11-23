@@ -1,2 +1,3 @@
 export * from "./interface";
-export * from "./defineConfig";
+
+export { Context } from "./Context";

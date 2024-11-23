@@ -1,7 +1,6 @@
 import { build } from "tsup";
 import { isMainEntry } from "@tools/api";
-import { config } from "@scripts/utils/config";
-import { createMainTsupOptions } from "@scripts/utils/toolkit";
+import { context } from "@scripts/utils/config";
 
 if (isMainEntry(import.meta)) {
   // ...
@@ -10,8 +9,7 @@ if (isMainEntry(import.meta)) {
 void main();
 async function main() {
   const watch = (process.env.WATCH_MAIN ?? "false") === "true";
-
   console.log(`[build:main] compiling`);
-  const opts = createMainTsupOptions(config);
+  const opts = context.createMainTsupOptions();
   await build({ ...opts, watch });
 }

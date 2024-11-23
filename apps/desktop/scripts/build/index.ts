@@ -1,7 +1,6 @@
 import process from "node:process";
 import { ts } from "@tools/api";
-import { generatePackageJson } from "@scripts/utils/toolkit";
-import { config } from "@scripts/utils/config";
+import { context } from "@scripts/utils/config";
 
 void main().then(
   () => {
@@ -15,10 +14,10 @@ void main().then(
 
 async function main() {
   console.log(`[build] start`);
-  await ts("clean");
+  await context.cleanup();
   await ts("build/main");
   await ts("build/preload");
   await ts("build/renderer");
-  await generatePackageJson(config);
+  await context.generatePackageJson();
   console.log(`[build] done`);
 }

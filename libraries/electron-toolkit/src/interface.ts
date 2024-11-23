@@ -1,48 +1,66 @@
-export type BuildOption = {
-  input: RelativePath;
-  output: RelativePath;
-};
-
-export type RendererOption = {
-  output: RelativePath;
-};
+import { Options } from "tsup";
 
 export type RelativePath = `./${string}`;
+export type Asset =
+  | {
+      type: "main";
+      filename: `@app/main/${string}`;
+      input: RelativePath;
+    }
+  | {
+      type: "preload";
+      filename: `@app/preload/${string}`;
+      input: RelativePath;
+    }
+  | {
+      type: "asar";
+      filename: `@app/${string}`;
+      source: RelativePath;
+    }
+  | {
+      type: "extra";
+      filename: `@ext/${string}`;
+      source: RelativePath;
+    }
+  // dynamic
+  | {
+      type: "asar";
+      dirname: `@app/${string}`;
+      source: RelativePath;
+      filter: (file: string) => boolean;
+    }
+  | {
+      type: "extra";
+      dirname: `@ext/${string}`;
+      source: RelativePath;
+      filter: (file: string) => boolean;
+    };
 
-export interface OriginConfig<
-  Preloads extends string[],
-  Renderers extends string[],
-> {
+export interface Config {
   base: string;
-  dist: {
-    build: RelativePath;
-    pack: RelativePath;
-  };
-  main: BuildOption;
-  preload: Record<Preloads[number], BuildOption>;
-  renderer: Record<Renderers[number], RendererOption>;
-  resources: {
-    internal: RelativePath[];
-    external: RelativePath[];
-  };
-}
+  dist_build: RelativePath;
+  dist_pack: RelativePath;
+  app: {
+    name: string;
+    author: string;
+    version: string;
+    product_name: string;
+    description: string;
+    copyright: string;
 
-export interface Config<Preloads extends string[], Renderers extends string[]> {
-  base?: string;
-  dist?: OriginConfig<Preloads, Renderers>["dist"];
-  main?: RelativePath | Partial<BuildOption>;
-  preload?:
-    | RelativePath
-    | Partial<BuildOption>
-    | Record<Preloads[number], Partial<BuildOption>>;
-  renderer?:
-    | RelativePath
-    | Partial<RendererOption>
-    | Record<Renderers[number], Partial<RendererOption>>;
-  resources?:
-    | RelativePath
-    | {
-        internal: RelativePath[];
-        external: RelativePath[];
-      };
+    // pack
+    icon: RelativePath; // .icns
+    // protocols
+  };
+  assets: Asset[];
+  options: {
+    main: {
+      tsconfig: RelativePath;
+      noExternal: Options["noExternal"];
+    };
+    preload: {
+      tsconfig: RelativePath;
+      noExternal: Options["noExternal"];
+    };
+  };
 }

@@ -1,12 +1,9 @@
-import { createDMG } from "electron-installer-dmg";
-import { config } from "@scripts/utils/config";
-import { createDarwinInstallerOptions } from "@scripts/utils/toolkit";
+import { context } from "@scripts/utils/config";
 
 void main();
 
 async function main() {
   console.log(`[make] make dmg installer...`);
-  const options = await createDarwinInstallerOptions(config);
-  await createDMG(options);
+  await context.makeDarwin();
   console.log(`[make] done.`);
 }

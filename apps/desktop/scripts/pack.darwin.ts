@@ -1,16 +1,11 @@
-import pack from "electron-packager";
-import { config } from "@scripts/utils/config";
-import { copyAsar, createPackOptions } from "@scripts/utils/toolkit";
+import { context } from "@scripts/utils/config";
 
 void main();
 async function main() {
   console.log(`[pack] pack darwin application`);
-
   console.log(`[pack] cp resources`);
-  await copyAsar(config);
-
+  await context.copyAsar();
   console.log(`[pack] start packing...`);
-  const options = await createPackOptions(config);
-  await pack(options);
+  await context.packDarwin();
   console.log(`[pack] darwin application packed`);
 }

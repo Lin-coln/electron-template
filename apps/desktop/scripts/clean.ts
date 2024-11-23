@@ -1,9 +1,8 @@
-import { config } from "@scripts/utils/config";
-import { clean } from "@scripts/utils/toolkit";
+import { context } from "@scripts/utils/config";
 
 void main();
 
 async function main() {
   console.log(`[clean] cleaning...`);
-  await clean(config);
+  await context.cleanup();
 }

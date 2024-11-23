@@ -1,5 +1,5 @@
-import { Config } from "./toolkit/interface";
 import { projectDirname } from "@scripts/utils/index";
+import { Context, Config } from "@lib/electron-toolkit";
 
 export const config: Config = {
   base: projectDirname,
@@ -64,3 +64,5 @@ export const config: Config = {
     },
   },
 };
+
+export const context = new Context(config);

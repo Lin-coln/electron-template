@@ -1,10 +1,10 @@
 import { Options } from "tsup";
 import path from "node:path";
-import { Config, RelativePath } from "./interface";
-import { Context } from "@scripts/utils/toolkit/Context";
+import { RelativePath } from "../interface";
+import { Context } from "../Context";
 
-export function createPreloadTsupOptions(cfg: Config): Options {
-  const ctx = new Context(cfg);
+export function createPreloadTsupOptions(this: Context): Options {
+  const cfg = this.config;
 
   const assets = cfg.assets.filter((asset) => asset.type === "preload");
   const opts = cfg.options.main;
@@ -14,12 +14,12 @@ export function createPreloadTsupOptions(cfg: Config): Options {
         const relativePath: RelativePath = `./${asset.filename.replace("@app/preload/", "")}`;
         const ext = path.extname(relativePath);
         const key = relativePath.slice(2, relativePath.length - ext.length);
-        const value = ctx.resolveFilename(asset.input);
+        const value = this.resolveFilename(asset.input);
         return [key, value];
       }),
     ),
-    outDir: ctx.resolvePreloadFilename(),
-    tsconfig: ctx.resolveFilename(opts.tsconfig),
+    outDir: this.resolveBuildFilename("preload"),
+    tsconfig: this.resolveFilename(opts.tsconfig),
     dts: false,
     format: ["cjs"],
     target: "es2023",
