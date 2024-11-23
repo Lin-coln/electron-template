@@ -1,5 +1,4 @@
 import process from "node:process";
-import { ts } from "@tools/api";
 import { context } from "@scripts/utils/config";
 import { build } from "tsup";
 import path from "node:path";
