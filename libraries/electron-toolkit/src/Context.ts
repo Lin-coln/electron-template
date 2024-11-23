@@ -108,7 +108,8 @@ export class Context {
       .map(([key, value]) => `--${key}=${value}`);
     const electron = createRequire(this.resolveFilename("."))("electron");
     const appProcess = child_process.spawn(electron, [".", ...argsList], {
-      stdio: "inherit",
+      // stdio: "inherit",
+      stdio: "ignore",
       cwd: this.resolveBuildFilename(),
     });
 

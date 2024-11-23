@@ -59,7 +59,11 @@ export function ChildProcessPlugin(opts: {
   };
   const manager = new ChildProcessManager({
     async onSpawnProcess(reboot) {
-      logger.log(`${reboot ? "reboot" : "start"}...`);
+      if (reboot) {
+        logger.log(`reboot...`, `(x ${count})`);
+      } else {
+        logger.log(`start...`);
+      }
       return await opts.onSpawnProcess(reboot);
     },
     onExitProcess() {
@@ -68,17 +72,14 @@ export function ChildProcessPlugin(opts: {
     },
   });
 
-  const reboot = debounce(async () => {
-    logger.log(`reboot...`, `(x ${count})`);
-    await manager.reboot();
-  }, 500);
+  const reboot = debounce(() => manager.reboot(), 500);
 
   return {
     name: "child-process-plugin",
     setup: async (build) => {
       build.onStart(() => {
-        logger.clear();
-        logger.log(`compiling...`, `(x ${count++})`);
+        // logger.clear();
+        logger.log(`compiling...`, `(x ${++count})`);
       });
       build.onEnd(async (res) => {
         logger.log(`compiled`, `(x ${count})`);
