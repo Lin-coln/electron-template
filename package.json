@@ -6,6 +6,11 @@
   "engines": {
     "node": ">=22.0.0"
   },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.19.11"
+    }
+  },
   "devDependencies": {
     "@tools/cli": "workspace:*",
     "cross-env": "^7.0.3",

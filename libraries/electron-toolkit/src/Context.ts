@@ -8,7 +8,7 @@ import { createPackOptions } from "./raw/createPackOptions";
 import { createDarwinInstallerOptions } from "./raw/createInstallerOptions";
 import { createMainTsupOptions } from "./raw/createMainTsupOptions";
 import { createPreloadTsupOptions } from "./raw/createPreloadTsupOptions";
-import pack from "electron-packager";
+import pack from "@electron/packager";
 import { createDMG } from "electron-installer-dmg";
 import { createRequire } from "node:module";
 import child_process from "node:child_process";

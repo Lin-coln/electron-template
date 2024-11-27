@@ -13,6 +13,7 @@
 - electron: 33.0.2
   - chrome: 130
   - node: 20.18.0
+- node: 22.0.0
 
 ## Build
 

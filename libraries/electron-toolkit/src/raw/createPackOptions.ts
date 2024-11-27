@@ -1,4 +1,4 @@
-import { Options } from "electron-packager";
+import { Options } from "@electron/packager";
 import { Config } from "../interface";
 import path from "path";
 import fs from "fs";
