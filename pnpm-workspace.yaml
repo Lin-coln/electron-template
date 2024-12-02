@@ -1,6 +1,7 @@
 packages:
   - apps/desktop
   - apps/view
+  - apps/server1
 
   # internal tools
   - tools/*

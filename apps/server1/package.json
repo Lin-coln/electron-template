@@ -1,0 +1,20 @@
+{
+  "name": "server1",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx ./scripts/dev.ts",
+    "build": "tsx ./scripts/build.ts"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.15.0",
+    "@types/node": "^22.7.9",
+    "tsx": "^4.19.1",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.1"
+  },
+  "dependencies": {
+    "koa": "^2.15.3"
+  }
+}
