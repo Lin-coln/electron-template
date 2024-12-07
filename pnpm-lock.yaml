@@ -52,7 +52,7 @@ importers:
         specifier: ^22.7.9
         version: registry.npmmirror.com/@types/node@22.10.0
       electron:
-        specifier: ^33.0.2
+        specifier: 33.2.0
         version: registry.npmmirror.com/electron@33.2.0
       electron-devtools-installer:
         specifier: ^3.2.0

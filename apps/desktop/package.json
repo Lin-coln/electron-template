@@ -17,7 +17,7 @@
   "devDependencies": {
     "@tools/api": "workspace:*",
     "@types/node": "^22.7.9",
-    "electron": "^33.0.2",
+    "electron": "33.2.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-installer-dmg": "^5.0.1",
     "@electron/packager": "^18.3.6",

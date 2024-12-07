@@ -7,7 +7,7 @@ export function createPreloadTsupOptions(this: Context): Options {
   const cfg = this.config;
 
   const assets = cfg.assets.filter((asset) => asset.type === "preload");
-  const opts = cfg.options.main;
+  const opts = cfg.options.preload;
   return {
     entry: Object.fromEntries(
       assets.map((asset) => {
@@ -22,7 +22,8 @@ export function createPreloadTsupOptions(this: Context): Options {
     tsconfig: this.resolveFilename(opts.tsconfig),
     dts: false,
     format: ["cjs"],
-    target: "es2023",
+    // target: "es2023",
+    target: "es2020",
     minify: false,
     clean: true,
     // splitting: false,
