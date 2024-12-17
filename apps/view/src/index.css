@@ -27,7 +27,6 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-
 }
 
 h1 {
@@ -66,10 +65,11 @@ button:focus-visible {
   }
 }
 
-html, body {
+html,
+body {
   -webkit-user-select: none;
   -webkit-app-region: drag;
-  /*background: transparent !important;*/
+  background: transparent !important;
 }
 body > * {
   -webkit-app-region: no-drag;

@@ -13,7 +13,8 @@
     "pack:windows": "ts pack.windows",
     "make:darwin": "ts make.darwin",
     "x:build-preview": "ts build && ts build/preview",
-    "x:bpm:darwin": "ts build && ts pack.darwin && ts make.darwin"
+    "x:bpm:darwin": "ts build && ts pack.darwin && ts make.darwin",
+    "postinstall": "ts postinstall"
   },
   "devDependencies": {
     "@tools/api": "workspace:*",
