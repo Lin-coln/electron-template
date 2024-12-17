@@ -89,7 +89,12 @@ export class Context {
 
   // pack
   async packDarwin() {
-    const options = await createPackOptions.call(this);
+    const options = await createPackOptions.call(this, "darwin-arm64");
+    await pack(options);
+  }
+
+  async packWindows() {
+    const options = await createPackOptions.call(this, "win32-x64");
     await pack(options);
   }
 

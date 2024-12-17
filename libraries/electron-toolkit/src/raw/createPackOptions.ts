@@ -10,8 +10,8 @@ interface PackageConfig {
   author: string;
   version: string;
   icon: string; // icon absolute path
-  arch: "arm64";
-  platform: "darwin";
+  arch: "arm64" | "x64";
+  platform: "darwin" | "win32";
   description: string;
   copyright: string;
   protocols?: string[];
@@ -21,7 +21,10 @@ interface PackageConfig {
   output: string;
 }
 
-export async function createPackOptions(this: Context): Promise<Options> {
+export async function createPackOptions(
+  this: Context,
+  platformArch: "darwin-arm64" | "win32-x64",
+): Promise<Options> {
   const cfg = this.config;
   const extra_resources = await resolveExtraResources(cfg);
 
@@ -41,8 +44,11 @@ export async function createPackOptions(this: Context): Promise<Options> {
     extra_resource: extra_resources,
 
     // todo
-    arch: "arm64",
-    platform: "darwin",
+    ...{
+      "darwin-x64": { arch: "arm64", platform: "darwin" },
+      "win32-x64": { arch: "x64", platform: "win32" },
+    }[platformArch],
+
     protocols: [],
   });
 
