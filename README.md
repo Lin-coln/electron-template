@@ -10,7 +10,7 @@
 
 ## Install
 
-- electron: 33.0.2
+- electron: 33.2.0
   - chrome: 130
   - node: 20.18.0
 - node: 22.0.0
