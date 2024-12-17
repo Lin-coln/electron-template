@@ -19,14 +19,21 @@ async function main() {
   console.log(`[build] start`);
   await context.cleanup();
 
-  console.log(`[build:main] compiling`);
+  console.log(`[build:main] compiling...`);
   await build(context.createMainTsupOptions());
 
-  console.log(`[build:preload] compiling`);
+  console.log(`[build:preload] compiling...`);
   await build(context.createPreloadTsupOptions());
 
+  console.log(`[build:renderer] compiling...`);
   await buildRenderer();
+
+  console.log(`[build] generate package.json...`);
   await context.generatePackageJson();
+
+  console.log(`[build] copyAsar...`);
+  await context.copyAsar();
+
   console.log(`[build] done`);
 }
 

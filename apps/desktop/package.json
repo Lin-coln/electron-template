@@ -8,11 +8,12 @@
     "clean": "ts clean",
     "dev:render": "ts dev/renderer",
     "dev:main": "ts dev/main",
-    "build-preview": "ts build && ts build/preview",
-    "build-installer": "ts build && ts pack.darwin && ts make.darwin",
     "build": "ts build",
-    "preview": "ts build/preview",
-    "ts:server": "ts server/main"
+    "pack:darwin": "ts pack.darwin",
+    "pack:windows": "ts pack.windows",
+    "make:darwin": "ts make.darwin",
+    "x:build-preview": "ts build && ts build/preview",
+    "x:bpm:darwin": "ts build && ts pack.darwin && ts make.darwin"
   },
   "devDependencies": {
     "@tools/api": "workspace:*",
