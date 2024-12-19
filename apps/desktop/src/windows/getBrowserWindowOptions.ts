@@ -1,5 +1,4 @@
-import { BoundsOptions, getBounds } from "@src/utils/window/getBounds";
-import { getIconFilename, PRELOAD_FILENAME } from "@src/utils";
+import { BoundsOptions, getBounds } from "./getBounds";
 
 export function getAppWindowOptions(
   opts: BoundsOptions & {
@@ -41,39 +40,6 @@ export function getAppWindowOptions(
       },
     } as Electron.BrowserWindowConstructorOptions);
   }
-
-  return options;
-}
-
-export function getDevWindowOptions(
-  opts: BoundsOptions & {
-    preload?: string;
-    closable?: boolean;
-    icon?: string;
-  },
-) {
-  const {
-    // bounds
-    width,
-    height,
-    margin,
-    placement,
-    display,
-    // webPreferences
-    preload,
-    ...windowOptions
-  } = opts;
-  const boundsOpts = { width, height, margin, placement, display };
-  const webPreferences = { preload };
-
-  const options = {
-    ...getBounds(boundsOpts),
-    ...windowOptions,
-    show: false,
-    webPreferences: {
-      ...webPreferences,
-    },
-  } as Electron.BrowserWindowConstructorOptions;
 
   return options;
 }

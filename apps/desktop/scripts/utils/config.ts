@@ -15,7 +15,7 @@ export const config: Config = {
     description: "my description",
     copyright: "my copyright",
     // darwin icon
-    icon: "./resources/icons/icon.icns",
+    icon: "./resources/icons/app.icns",
   },
 
   // assets

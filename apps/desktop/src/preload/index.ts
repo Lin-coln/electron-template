@@ -63,11 +63,7 @@ function main() {
   const preloadLogger = useLogger("preload", "#518d57");
   const mainLoader = useLogger("main", "#1f64f8");
   preloadLogger.log(`start`);
-
-  ipcRenderer.on(`dev#console.log`, (ipcEvent, ...args) => {
-    mainLoader.log(...args);
-  });
-
+  // ...
   preloadLogger.log(`end`);
   console.log("\n\n\n");
 }

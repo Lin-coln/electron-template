@@ -1,5 +1,4 @@
-import { Rectangle, screen } from "electron";
-import Display = Electron.Display;
+import { Rectangle, screen, Display } from "electron";
 
 export type BoundsOptions = {
   width: number;

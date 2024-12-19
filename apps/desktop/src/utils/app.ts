@@ -17,7 +17,7 @@ if (args.boot_mode === "development") {
   process.env.NODE_ENV = "development";
 }
 
-export const APP_PROTOCOL = "xaos";
+// export const APP_PROTOCOL = "xaos";
 export const isDevelopment = args.boot_mode === "development";
 export const isTest = args.boot_mode === "test";
 export const isProduction = args.boot_mode === "production";

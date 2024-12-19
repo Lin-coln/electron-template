@@ -1,11 +1,5 @@
 import { app, nativeTheme } from "electron";
-import {
-  APP_PROTOCOL,
-  getIconFilename,
-  isDevelopment,
-  isTest,
-} from "@src/utils";
-import { logger } from "@src/utils/logger";
+import { getIconFilename, isDevelopment, isTest } from "@src/utils";
 import { installChromeExtensions } from "@lib/electron-utils";
 import { initWindows } from "@src/windows";
 
@@ -18,8 +12,7 @@ async function main() {
   async function quitIfSecondInstance() {
     const gotTheLock = app.requestSingleInstanceLock();
     if (!gotTheLock) {
-      logger.log(`[init::stage0] restrict single instance, quit...`);
-      app.quit();
+      console.log(`[init] restrict single instance, quit...`);
       return "quit";
     } else {
       return "continue";
@@ -35,7 +28,8 @@ async function main() {
   // for applications and their menu bar to stay active until the user quits
   // explicitly with Cmd + Q.
   app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") app.quit();
+    if (process.platform === "darwin") return;
+    app.quit();
   });
 
   // set dock icon for MacOS & linux
@@ -44,10 +38,10 @@ async function main() {
   }
 
   // set app protocol client
-  app.setAsDefaultProtocolClient(APP_PROTOCOL, process.execPath, [
-    ...(app.isPackaged ? [] : [process.argv[1]]),
-    "--",
-  ]);
+  // app.setAsDefaultProtocolClient(APP_PROTOCOL, process.execPath, [
+  //   ...(app.isPackaged ? [] : [process.argv[1]]),
+  //   "--",
+  // ]);
 
   // theme
   nativeTheme.themeSource = "system";
@@ -61,7 +55,7 @@ async function main() {
    * - redirect to open-url
    */
   app.on("second-instance", (_, commandLine) => {
-    logger.log("[commandLine]", commandLine);
+    console.log("[commandLine]", commandLine);
     // if (mainWindow) {
     //   if (mainWindow.isMinimized()) mainWindow.restore()
     //   mainWindow.focus()
@@ -93,9 +87,9 @@ async function main() {
   });
 
   // init services
-  const services = await import("./services").then((mod) => mod.default);
-  await services.initialize();
-  logger.log(`service started`);
+  const services = await import("./services");
+  await services.initServices();
+  console.log(`service started`);
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
